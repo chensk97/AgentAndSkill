@@ -91,3 +91,14 @@ argument-hint: "提供自然语言需求描述、对话记录或功能列表"
 ## 输出格式
 
 返回完整的 `PRD.md` 文件内容，并写入 `Agent_doc/PRD.md`。完成后更新 `Agent_doc/Agent_Progress_Log.md`，记录输出路径、关键假设和下游移交对象 **pd-architect-task-planner**。
+
+## Superpowers 技能集成
+
+统一规则见 [AGENTS.md › Superpowers Skill Integration](./pd-references/AGENTS.md#superpowers-skill-integration-shared)。本角色额外的强约束：
+
+| 触发场景 | 必须显式调用 |
+|----------|--------------|
+| 用户原始需求模糊、需要澄清 | `superpowers:brainstorming`（每次只问 1 个问题，从目的/约束/成功标准切入） |
+| 产出 PRD 前的最终自检 | `superpowers:verification-before-completion`（逐条对照"每个功能点都有验收标准"） |
+
+调用时按 `using-superpowers` 约定显式声明。

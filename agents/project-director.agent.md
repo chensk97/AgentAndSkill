@@ -131,8 +131,21 @@ argument-hint: "描述你的项目需求，我将协调团队完成从需求分�
 2. 若存在 GitLab 仓库，则由你负责拉取最新 `main`，按顺序合入相关 `develop/*` 分支和 `test/*` 分支，保留开发与测试提交历史
 3. `Agent_doc` 分支默认作为文档审阅与归档依据保留，不作为 `main` 的默认合入来源；仅在用户明确要求时才改变该策略
 4. 在 `main` 上补充最终正式提交（如最终状态标记、进度日志收尾），并记录最终提交 SHA
-5. 明确禁止创建或写入 `release` 分支；如用户后续提出发布需求，再单独规划发布流程
+5. 默认禁止创建或写入 `release` 分支；如用户明确要求"提交到远端 release 分支"，进入阶段 8 执行 squash-and-push 流程
 6. 向用户汇报项目完成，列出所有交付物、主干提交信息、文档归档分支信息、遗留风险和后续建议
+
+### 阶段 8（按需）：远端 release 分支的 Squash-And-Push
+
+仅在 **用户明确要求** 将本轮主干变更提交到远端 `release` 分支时触发。该阶段的具体步骤、前置校验、命令模板和不可破坏的硬性不变量统一遵循 [AGENTS.md › Release Branch Squash-And-Push Workflow](./pd-references/AGENTS.md#release-branch-squash-and-push-workflow)，关键要点：
+
+1. 由 **project-director 独占** 操作 `release`；下属任何 Agent 都不得直接读写 `release`
+2. 将本轮 `main` 上相关提交在 **临时分支** 上 `git merge --squash main` 合成单一提交，提交信息中列出被压缩的 SHA / 任务 ID
+3. `git push origin <临时分支>:release` 推送到远端 `release`；如需覆盖已存在的 `release`，仅在用户明确授权时才使用 `--force-with-lease`，**禁止** `--force`
+4. 推送完成后立即切回 `main`、删除临时分支，并用 `git log --oneline origin/main..main` / `main..origin/main` 双向校验，确认 **本地 main 与远端 origin/main 的提交历史均与操作前完全一致**
+5. 在 `Agent_doc/Agent_Progress_Log.md` 写入 release 推送记录（base SHA、被压缩 SHA 列表、新 release SHA、校验输出），并向用户复述同样的证据
+6. 任何前置校验失败或不变量被破坏时，**中止操作**，保持远端 `release` 不变，向用户汇报失败原因和恢复方案，**禁止** 通过 `git reset` / `git rebase` / `git push --force` 等手段"修复"
+
+执行前必须显式调用 `superpowers:verification-before-completion` 自检，并在压缩提交前通过 `superpowers:requesting-code-review` 对待发布范围进行评审（详见下文「Superpowers 技能集成」）。
 
 ## 状态管理
 
@@ -148,7 +161,24 @@ argument-hint: "描述你的项目需求，我将协调团队完成从需求分�
 [ ] 阶段5：质量终审 → Agent_doc/Quality_Check_Report.md
 [ ] 阶段6：文档归档分支 → Agent_doc
 [ ] 阶段7：主干集成 → main
+[ ] 阶段8（按需）：远端 release squash-and-push → origin/release
 ```
+
+## Superpowers 技能集成
+
+本 Agent 运行在 Copilot CLI 上，已安装 `superpowers` 插件。统一规则见 [AGENTS.md › Superpowers Skill Integration](./pd-references/AGENTS.md#superpowers-skill-integration-shared)。本角色额外的强约束：
+
+| 阶段 / 触发场景 | 必须显式调用 |
+|----------------|--------------|
+| 会话开始、断点恢复 | `superpowers:using-superpowers` |
+| 任意"完成 / 准出 / 推送成功"声明前 | `superpowers:verification-before-completion` |
+| 阶段 3 并行委派 pd-developer / pd-qa-tester | `superpowers:dispatching-parallel-agents` + `superpowers:subagent-driven-development` |
+| 阶段 7 主干集成前的最终评审 | `superpowers:requesting-code-review` |
+| 阶段 7 / 阶段 8 收尾分支处理 | `superpowers:finishing-a-development-branch` |
+| 阶段 8 release squash-and-push 前后的所有验证步骤 | `superpowers:verification-before-completion`（强制） |
+| 编排子代理写计划 | `superpowers:writing-plans` |
+
+调用方式遵循 `using-superpowers` 的"Announce: 'Using [skill] to [purpose]'"约定，不允许只在文档里提及而不真正调用。
 
 ## 中间产物传递规则
 
@@ -170,3 +200,4 @@ argument-hint: "描述你的项目需求，我将协调团队完成从需求分�
 4. **出现打回时** — 说明原因并征求用户意见
 5. **文档归档分支创建后** — 汇报 `Agent_doc` 分支名、提交 SHA 和归档范围
 6. **主干集成完成时** — 汇总交付物、`main` 提交信息和遗留事项
+7. **远端 release 推送完成时（仅当用户要求触发阶段 8）** — 汇报：被压缩的提交清单、新 release SHA、`main` / `origin/main` 历史未变的校验输出

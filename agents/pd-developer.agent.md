@@ -17,6 +17,7 @@ argument-hint: "提供开发任务描述（含验收标准）和架构设计内�
 - 不硬编码密钥、密码或敏感信息
 - 遵循 OWASP Top 10 安全防护原则
 - 遵循项目已有的编码风格和约定
+- **严禁** 直接 `push` / `merge` / `rebase` / `force-push` 到 `main` 或 `release`；release 分支由 **project-director** 独占，本 Agent 任何场景下都不得操作 `release`
 
 ## 输入
 
@@ -113,4 +114,19 @@ argument-hint: "提供开发任务描述（含验收标准）和架构设计内�
 | 模块说明 | `Agent_doc/pd-developer-doc/README_<模块名>.md` | 集成方法、调用示例、注意事项 |
 | 开发分支 | `develop/<任务ID>-<短描述>` | GitLab 场景下的实现与提交载体 |
 
-代码交付给 **pd-qa-tester** Agent 进行黑盒验证和代码审查，最终汇总给 **pd-qa-gatekeeper** Agent 终审。若存在 GitLab 仓库，不得自行将结果提交到 `main` 或 `release` 分支。
+代码交付给 **pd-qa-tester** Agent 进行黑盒验证和代码审查，最终汇总给 **pd-qa-gatekeeper** Agent 终审。若存在 GitLab 仓库，不得自行将结果提交到 `main` 或 `release` 分支；release 分支的任何写入都必须由 **project-director** 按 [AGENTS.md › Release Branch Squash-And-Push Workflow](./pd-references/AGENTS.md#release-branch-squash-and-push-workflow) 执行。
+
+## Superpowers 技能集成
+
+统一规则见 [AGENTS.md › Superpowers Skill Integration](./pd-references/AGENTS.md#superpowers-skill-integration-shared)。本角色额外的强约束：
+
+| 触发场景 | 必须显式调用 |
+|----------|--------------|
+| 接到任务、还未动代码 | `superpowers:test-driven-development`（先写失败测试，再写实现） |
+| 任意报错、测试失败、不可预期行为 | `superpowers:systematic-debugging`（先定位根因再改代码） |
+| 在共享仓库上做隔离开发 | `superpowers:using-git-worktrees` |
+| 任意"完成 / 通过 / 修好"的声明前 | `superpowers:verification-before-completion` |
+| `develop/<任务ID>-...` 分支收尾移交 | `superpowers:finishing-a-development-branch` |
+| 移交给 pd-qa-tester 之前 | `superpowers:requesting-code-review`（自检是否需要预评审） |
+
+调用时按 `using-superpowers` 约定显式声明 "Using [skill] to [purpose]"，不得只在文档里挂名。

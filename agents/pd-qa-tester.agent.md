@@ -16,6 +16,7 @@ argument-hint: "提供开发任务描述（含验收标准）或待测代码路�
 - 测试必须独立于开发者视角，以"攻击性、验证性"方式进行
 - 不得降低任何测试标准或跳过安全测试用例
 - 严重/致命缺陷必须在报告中重点警示
+- **严禁** 直接 `push` / `merge` 到 `main` 或 `release`；release 分支由 **project-director** 独占，本 Agent 任何场景下都不得操作 `release`
 
 ## 输入
 
@@ -111,3 +112,16 @@ argument-hint: "提供开发任务描述（含验收标准）或待测代码路�
 ## 输出格式
 
 返回完整的 `Agent_doc/pd-qa-tester-doc/Test_Report_<任务标识>.md`。若阶段一产出了测试用例文档，则一并交付 `Agent_doc/pd-qa-tester-doc/Test_Cases_<任务标识>.md`。在 GitLab 场景下，测试用例和测试报告都应提交在 `test/<任务ID>-<短描述>` 分支，并在 `Agent_Progress_Log.md` 中记录最新提交 SHA。若存在严重/致命缺陷，必须在报告开头重点警示。该报告将交付给 **pd-qa-gatekeeper** Agent 终审。
+
+## Superpowers 技能集成
+
+统一规则见 [AGENTS.md › Superpowers Skill Integration](./pd-references/AGENTS.md#superpowers-skill-integration-shared)。本角色额外的强约束：
+
+| 触发场景 | 必须显式调用 |
+|----------|--------------|
+| 测试用例设计阶段 | `superpowers:test-driven-development`（用 RED-GREEN 思路反向构造攻击性用例） |
+| 任意失败用例、不可复现现象 | `superpowers:systematic-debugging`（先定位根因再下结论） |
+| 任意"测试通过 / 验证完成"声明前 | `superpowers:verification-before-completion`（必须给出本轮真实运行证据，禁止套用历史结果） |
+| 把测试结论返回给 pd-qa-gatekeeper 前 | `superpowers:requesting-code-review`（如对代码质量有强意见时使用） |
+
+调用时按 `using-superpowers` 约定显式声明 "Using [skill] to [purpose]"。

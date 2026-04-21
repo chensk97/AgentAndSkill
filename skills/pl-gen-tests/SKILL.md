@@ -42,3 +42,11 @@ description: "逆向测试技能。通过梳理模块公开接口和关键行为
 ## 输出格式
 
 返回测试草案文件和 `LEARNINGS/TESTS/TEST_ANALYSIS_<module>.md`，并在 `LEARNING_PROGRESS.md` 中记录测试目标、覆盖维度和仍待人工补充的断言。
+
+## Superpowers 技能集成
+
+统一规则见 [AGENTS.md › Superpowers Skill Integration](../../agents/pl-references/AGENTS.md#superpowers-skill-integration-shared)。本技能额外约束：
+
+- 设计测试草案时，调用 `superpowers:test-driven-development`（用 RED-GREEN 思路反向覆盖行为）
+- 草案运行失败、行为难以确认时，调用 `superpowers:systematic-debugging`
+- 任意"测试覆盖足够"声明前，调用 `superpowers:verification-before-completion`（必须区分"已运行"与"仅为草案"）

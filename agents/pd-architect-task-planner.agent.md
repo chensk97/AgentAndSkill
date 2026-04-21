@@ -102,3 +102,15 @@ argument-hint: "提供 PRD.md 文件路径或粘贴 PRD 内容"
 ## 输出格式
 
 返回完整的 `System_Architecture_and_Task_Breakdown.md` 文件内容，并写入 `Agent_doc/System_Architecture_and_Task_Breakdown.md`。完成后更新 `Agent_doc/Agent_Progress_Log.md`，记录任务拆解摘要、输出路径和下游移交对象 **pd-developer**、**pd-qa-tester**。
+
+## Superpowers 技能集成
+
+统一规则见 [AGENTS.md › Superpowers Skill Integration](./pd-references/AGENTS.md#superpowers-skill-integration-shared)。本角色额外的强约束：
+
+| 触发场景 | 必须显式调用 |
+|----------|--------------|
+| 在拆解任务清单时 | `superpowers:writing-plans`（每个任务采用 bite-sized 步骤、TDD-friendly） |
+| 与用户拍板技术选型前 | `superpowers:brainstorming`（提供 2-3 种方案对比） |
+| 输出架构文档前 | `superpowers:verification-before-completion`（自检是否覆盖全部 PRD 功能点） |
+
+调用时按 `using-superpowers` 约定显式声明。

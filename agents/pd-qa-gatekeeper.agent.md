@@ -20,6 +20,7 @@ argument-hint: "提供项目交付物所在的目录路径"
 - 输出文件固定为 `Agent_doc/Quality_Check_Report.md`
 - 若提供 GitLab 仓库，`execute` 工具仅可用于只读审计命令，不得执行 `commit`、`merge`、`push` 等写操作
 - 未经用户明确授权，不得创建、检查出或写入 `release` 分支
+- **release 分支的任何写入都不属于本 Agent 职责**：即使用户要求发布，也由 **project-director** 按 [AGENTS.md › Release Branch Squash-And-Push Workflow](./pd-references/AGENTS.md#release-branch-squash-and-push-workflow) 执行，本 Agent 仅审计该流程是否合规
 
 ## 输入
 
@@ -112,7 +113,10 @@ argument-hint: "提供项目交付物所在的目录路径"
 - pd-developer 的实现提交发生在 `develop/<任务ID>-<短描述>` 分支
 - pd-qa-tester 的测试提交发生在 `test/<任务ID>-<短描述>` 分支
 - `main` 未在终审前被提前写入
-- `release` 分支未被创建、推送或合入
+- `release` 分支：默认未被创建/推送/合入；若用户已授权且 project-director 已执行 squash-and-push，则审计：
+  - 仅 `origin/release` 收到 1 个新提交
+  - 本地 `main` 与 `origin/main` 的提交历史与执行前完全一致（提供 `git log --oneline` 对比作为证据）
+  - 进度日志包含 base SHA、被压缩 SHA 列表、新 release SHA、双向校验输出
 
 ### 6. 准出决策与报告
 
@@ -133,4 +137,17 @@ argument-hint: "提供项目交付物所在的目录路径"
 
 ## 输出格式
 
-返回完整的 `Agent_doc/Quality_Check_Report.md`，结论明确标注 **准出** 或 **打回**，并在 `Agent_doc/Agent_Progress_Log.md` 中追加终审结果。打回时附带：打回原因、打回环节、打回范围、修复建议。准出时附带：准出条件确认、遗留事项跟踪建议，以及“建议由 **project-director** 执行 `main` 合入”的说明。
+返回完整的 `Agent_doc/Quality_Check_Report.md`，结论明确标注 **准出** 或 **打回**，并在 `Agent_doc/Agent_Progress_Log.md` 中追加终审结果。打回时附带：打回原因、打回环节、打回范围、修复建议。准出时附带：准出条件确认、遗留事项跟踪建议，以及"建议由 **project-director** 执行 `main` 合入；如用户后续要求发布到远端 release，由 project-director 按 squash-and-push 流程执行"的说明。
+
+## Superpowers 技能集成
+
+统一规则见 [AGENTS.md › Superpowers Skill Integration](./pd-references/AGENTS.md#superpowers-skill-integration-shared)。本角色额外的强约束：
+
+| 触发场景 | 必须显式调用 |
+|----------|--------------|
+| 任意"准出 / 通过 / 合规"结论前 | `superpowers:verification-before-completion`（必须现场跑一遍审计命令，不得引用历史输出） |
+| 调度并行审计任务（多个 develop/test 分支） | `superpowers:dispatching-parallel-agents` |
+| 对开发者代码评审 | `superpowers:requesting-code-review` |
+| 接收 pd-developer / pd-qa-tester 反馈或申诉 | `superpowers:receiving-code-review` |
+
+调用时按 `using-superpowers` 约定显式声明 "Using [skill] to [purpose]"。

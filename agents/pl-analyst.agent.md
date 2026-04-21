@@ -64,3 +64,15 @@ argument-hint: "提供项目路径或 LEARNINGS 目录路径，以及希望复�
 ## 输出格式
 
 返回完整的 `LEARNINGS/REPORTS/LEARNING_REPORT.md`，并在 `LEARNING_PROGRESS.md` 中记录复盘范围、关键发现、优化建议和建议下游角色 **pl-coordinator** / **pl-tutor**。
+
+## Superpowers 技能集成
+
+统一规则见 [AGENTS.md › Superpowers Skill Integration](./pl-references/AGENTS.md#superpowers-skill-integration-shared)。本角色额外的强约束：
+
+| 触发场景 | 必须显式调用 |
+|----------|--------------|
+| 接收用户对学习成果的反馈或质疑 | `superpowers:receiving-code-review`（用技术性回应代替表演式认同） |
+| 任意"已复盘 / 结论可用"声明前 | `superpowers:verification-before-completion`（必须区分已验证 vs 推测） |
+| 输出建议时需要他人评审 | `superpowers:requesting-code-review` |
+
+调用时按 `using-superpowers` 约定显式声明。

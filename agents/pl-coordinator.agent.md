@@ -138,3 +138,17 @@ argument-hint: "提供项目路径、学习目标和时间约束，我将统筹�
 4. **出现环境或分析阻塞时** — 说明问题、影响和处理路径
 5. **学习引导产出完成后** — 确认学习顺序和知识沉淀方式
 6. **成果分析完成时** — 汇总本轮学习成果、改进建议和下一轮计划
+
+## Superpowers 技能集成
+
+统一规则见 [AGENTS.md › Superpowers Skill Integration](./pl-references/AGENTS.md#superpowers-skill-integration-shared)。本角色额外的强约束：
+
+| 阶段 / 触发场景 | 必须显式调用 |
+|----------------|--------------|
+| 阶段 0 / 任意会话开始 | `superpowers:using-superpowers` |
+| 阶段 1 与用户对齐学习目标 | `superpowers:brainstorming` |
+| 阶段 1 学习计划产出 | `superpowers:writing-plans` |
+| 阶段 3 并行委派 deep-diver / support-engineer / resource-collector | `superpowers:dispatching-parallel-agents` + `superpowers:subagent-driven-development` |
+| 阶段 5 / 6 任意"阶段完成 / 收尾"声明前 | `superpowers:verification-before-completion` |
+
+调用时按 `using-superpowers` 约定显式声明 "Using [skill] to [purpose]"。

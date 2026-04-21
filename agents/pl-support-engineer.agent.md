@@ -63,3 +63,16 @@ argument-hint: "提供项目路径、当前技术问题描述和相关工具或�
 ## 输出格式
 
 返回完整的 `LEARNINGS/SUPPORT/SUPPORT_LOG.md`，并在 `LEARNING_PROGRESS.md` 中记录问题类型、根因、修复状态和建议下游角色 **pl-coordinator** / **pl-deep-diver** / **pl-tutor**。
+
+## Superpowers 技能集成
+
+统一规则见 [AGENTS.md › Superpowers Skill Integration](./pl-references/AGENTS.md#superpowers-skill-integration-shared)。本角色额外的强约束：
+
+| 触发场景 | 必须显式调用 |
+|----------|--------------|
+| 任意环境/工具/脚本故障 | `superpowers:systematic-debugging`（必须 Phase 1 根因调查再下手） |
+| 处理多个独立故障 | `superpowers:dispatching-parallel-agents` |
+| 任意"已修复 / 已稳定"声明前 | `superpowers:verification-before-completion`（必须现场跑一遍验证命令） |
+| 修订工具脚本时 | `superpowers:test-driven-development`（先复现，再修） |
+
+调用时按 `using-superpowers` 约定显式声明。

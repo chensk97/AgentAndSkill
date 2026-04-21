@@ -40,3 +40,11 @@ description: "依赖分析技能。解析依赖清单、区分运行时与开发
 ## 输出格式
 
 返回完整的 `LEARNINGS/DEPENDENCY_MAP.md`，并在 `LEARNING_PROGRESS.md` 中记录解析的清单文件、发现的关键风险和建议后续角色 **pl-explorer** / **pl-tutor**。
+
+## Superpowers 技能集成
+
+统一规则见 [AGENTS.md › Superpowers Skill Integration](../../agents/pl-references/AGENTS.md#superpowers-skill-integration-shared)。本技能额外约束：
+
+- 解析锁文件 / 依赖工具异常时，调用 `superpowers:systematic-debugging`
+- 多种依赖管理器并存时，调用 `superpowers:dispatching-parallel-agents`
+- 任意"依赖图完整"声明前，调用 `superpowers:verification-before-completion`（必须显式标注无法验证的依赖）

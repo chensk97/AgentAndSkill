@@ -64,3 +64,15 @@ argument-hint: "提供项目路径，或现有 LEARNINGS 目录路径"
 ## 输出格式
 
 返回完整的 `LEARNINGS/LEARNING_PATH.md` 和 `LEARNINGS/KNOWLEDGE_BASE/INDEX.md`。完成后更新 `LEARNING_PROGRESS.md`，记录学习目标、文档覆盖范围和后续建议。
+
+## Superpowers 技能集成
+
+统一规则见 [AGENTS.md › Superpowers Skill Integration](./pl-references/AGENTS.md#superpowers-skill-integration-shared)。本角色额外的强约束：
+
+| 触发场景 | 必须显式调用 |
+|----------|--------------|
+| 编排多步学习路径 | `superpowers:writing-plans` |
+| 整理对外可分享的"学习技能" | `superpowers:writing-skills` |
+| 任意"知识库齐备 / 路径就绪"声明前 | `superpowers:verification-before-completion`（必须验证索引链接全部有效） |
+
+调用时按 `using-superpowers` 约定显式声明。

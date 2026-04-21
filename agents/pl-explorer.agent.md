@@ -77,3 +77,15 @@ argument-hint: "提供项目路径或 Git 仓库 URL"
 ## 输出格式
 
 返回完整的 `LEARNINGS/PROJECT_MAP.md` 文件内容，并更新 `LEARNINGS/LEARNING_PROGRESS.md`，记录输入项目、扫描范围、输出路径和建议下游角色 **pl-deep-diver** / **pl-tutor** / 技能 **pl-analyze-deps**。
+
+## Superpowers 技能集成
+
+统一规则见 [AGENTS.md › Superpowers Skill Integration](./pl-references/AGENTS.md#superpowers-skill-integration-shared)。本角色额外的强约束：
+
+| 触发场景 | 必须显式调用 |
+|----------|--------------|
+| 大型多语言/多顶层目录仓库的并行扫描 | `superpowers:dispatching-parallel-agents` |
+| 扫描脚本失败、目录无法识别、构建配置异常 | `superpowers:systematic-debugging` |
+| 任意"扫描完成 / 已识别"声明前 | `superpowers:verification-before-completion`（必须给出实际证据路径） |
+
+调用时按 `using-superpowers` 约定显式声明。

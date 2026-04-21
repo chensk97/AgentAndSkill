@@ -37,3 +37,11 @@ description: "数据流追踪技能。围绕一个函数、端点、模块或 HD
 ## 输出格式
 
 返回完整的 `LEARNINGS/FLOWS/<topic>.md`，并在 `LEARNING_PROGRESS.md` 中记录分析入口、关键证据路径和建议后续角色 **pl-deep-diver**。
+
+## Superpowers 技能集成
+
+统一规则见 [AGENTS.md › Superpowers Skill Integration](../../agents/pl-references/AGENTS.md#superpowers-skill-integration-shared)。本技能额外约束：
+
+- 链路断裂、动态分发难以定位时，调用 `superpowers:systematic-debugging`
+- 多入口并行追踪时，调用 `superpowers:dispatching-parallel-agents`
+- 任意"链路打通"声明前，调用 `superpowers:verification-before-completion`（必须显式标注不确定链路）

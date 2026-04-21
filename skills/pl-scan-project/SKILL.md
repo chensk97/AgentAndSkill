@@ -37,3 +37,11 @@ description: "项目扫描技能。扫描项目目录、识别技术栈、入口
 ## 输出格式
 
 返回完整的 `LEARNINGS/PROJECT_MAP.md`，并在 `LEARNING_PROGRESS.md` 中记录扫描范围、忽略规则、输出路径和建议后续技能 **pl-analyze-deps**。
+
+## Superpowers 技能集成
+
+统一规则见 [AGENTS.md › Superpowers Skill Integration](../../agents/pl-references/AGENTS.md#superpowers-skill-integration-shared)。本技能额外约束：
+
+- 大型多语言仓库扫描时，调用 `superpowers:dispatching-parallel-agents` 拆分扫描子任务
+- 扫描脚本失败 / 目录无法识别时，调用 `superpowers:systematic-debugging`
+- 任意"扫描完成"声明前，调用 `superpowers:verification-before-completion`

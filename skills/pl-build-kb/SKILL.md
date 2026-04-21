@@ -36,3 +36,10 @@ description: "知识库汇总技能。汇总现有学习文档，建立索引、
 ## 输出格式
 
 返回完整的 `LEARNINGS/KNOWLEDGE_BASE/INDEX.md`，并在 `LEARNING_PROGRESS.md` 中记录汇总范围、缺失文档和建议下游角色 **pl-tutor**。
+
+## Superpowers 技能集成
+
+统一规则见 [AGENTS.md › Superpowers Skill Integration](../../agents/pl-references/AGENTS.md#superpowers-skill-integration-shared)。本技能额外约束：
+
+- 编排可复用的知识库检索"技巧"时，调用 `superpowers:writing-skills`
+- 任意"索引完成"声明前，调用 `superpowers:verification-before-completion`（必须确认所有链接对应文件存在）

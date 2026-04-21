@@ -59,3 +59,29 @@
 - `pl-deep-diver` should usually trigger or emulate the work of `pl-trace-flow` and `pl-gen-tests` when deeper evidence is needed.
 - `pl-tutor` should consume existing outputs and then trigger or emulate `pl-build-kb` when the user wants structured review materials.
 - `pl-analyst` should consume outputs from all prior roles, summarize learning effectiveness, and feed optimization suggestions back to `pl-coordinator` and `pl-tutor`.
+
+## Superpowers Skill Integration (shared)
+
+This learning suite runs on Copilot CLI alongside the `superpowers` plugin (installed as a Copilot CLI plugin, NOT a sibling folder of this repo). When a superpowers skill applies, every `pl-*` agent and skill MUST invoke the corresponding skill explicitly via the Copilot CLI `skill` tool — for example `skill superpowers:systematic-debugging` — and announce the use as required by the `superpowers:using-superpowers` skill.
+
+> ⚠️ Do NOT reference superpowers skills via filesystem paths (e.g. `../../superpowers/skills/...`). The superpowers plugin is loaded by Copilot CLI by namespace `superpowers:<skill-name>`; always invoke skills by that identifier.
+
+Default mappings (each role / skill file may add more):
+
+| 触发场景 | 必须调用的 superpowers 技能 |
+|----------|------------------------------|
+| 任意会话开始、需要发现可用技能 | `superpowers:using-superpowers` |
+| 编排学习计划、与用户拍板范围 | `superpowers:brainstorming` |
+| 撰写多步学习计划 / 学习路径 | `superpowers:writing-plans` |
+| 多个独立子任务并行（多模块、多依赖、多入口） | `superpowers:dispatching-parallel-agents` |
+| 通过子代理并行执行学习任务 | `superpowers:subagent-driven-development` |
+| 任意报错 / 不可复现行为 / 工具异常 | `superpowers:systematic-debugging` |
+| 通过测试驱动方式逆向理解代码 | `superpowers:test-driven-development` |
+| 在共享仓库上做隔离学习实验 | `superpowers:using-git-worktrees` |
+| 任意"完成 / 跑通 / 已理解"的声明前 | `superpowers:verification-before-completion` |
+| 新建或修订 SKILL.md / Agent 文档 | `superpowers:writing-skills` |
+| 整理对外评审 / 知识库审阅 | `superpowers:requesting-code-review` |
+
+约束：
+- 不允许只在文档中提及而不真正调用；调用时按 `using-superpowers` 的"Announce: 'Using [skill] to [purpose]'"声明。
+- 当 superpowers 技能与本 AGENTS.md 的强约束冲突时，遵循 `using-superpowers` 的优先级：用户显式指令 > superpowers 技能 > 默认行为；本文件中的"不伪造证据 / 区分已确认与待验证 / 输出目录规范"等条款属于"用户显式指令"，必须高于 superpowers 默认建议。

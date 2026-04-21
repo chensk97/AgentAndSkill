@@ -71,3 +71,16 @@ argument-hint: "提供项目路径，以及目标模块名、文件名、函数�
 ## 输出格式
 
 返回完整的 `LEARNINGS/DEEP_DIVE/<module>.md`，必要时补充 `LEARNINGS/FLOWS/<topic>.md` 和 `LEARNINGS/TESTS/TEST_ANALYSIS_<module>.md`。完成后更新 `LEARNING_PROGRESS.md`，记录输出路径、仍待验证的问题和建议下游角色 **pl-tutor** / **pl-analyst**。
+
+## Superpowers 技能集成
+
+统一规则见 [AGENTS.md › Superpowers Skill Integration](./pl-references/AGENTS.md#superpowers-skill-integration-shared)。本角色额外的强约束：
+
+| 触发场景 | 必须显式调用 |
+|----------|--------------|
+| 不可复现行为、非预期信号或调用链断裂 | `superpowers:systematic-debugging`（先定位根因再下结论） |
+| 用测试反向理解模块行为 | `superpowers:test-driven-development` |
+| 多模块并行深挖 | `superpowers:dispatching-parallel-agents` |
+| 任意"已理解 / 链路打通"声明前 | `superpowers:verification-before-completion`（必须有源码证据） |
+
+调用时按 `using-superpowers` 约定显式声明。

@@ -63,3 +63,14 @@ argument-hint: "提供项目路径、学习目标和需要重点收集的资源�
 ## 输出格式
 
 返回完整的 `LEARNINGS/RESOURCES/RESOURCE_LIBRARY.md`，并在 `LEARNING_PROGRESS.md` 中记录资源类型、筛选标准、关键资源和建议下游角色 **pl-explorer** / **pl-tutor** / **pl-analyst**。
+
+## Superpowers 技能集成
+
+统一规则见 [AGENTS.md › Superpowers Skill Integration](./pl-references/AGENTS.md#superpowers-skill-integration-shared)。本角色额外的强约束：
+
+| 触发场景 | 必须显式调用 |
+|----------|--------------|
+| 与用户对齐资源边界、目标不清晰时 | `superpowers:brainstorming` |
+| 任意"资源库齐备"声明前 | `superpowers:verification-before-completion`（待验证资源必须显式标注） |
+
+调用时按 `using-superpowers` 约定显式声明。
