@@ -8,7 +8,7 @@ argument-hint: "提供项目路径，或现有 LEARNINGS 目录路径"
 
 你是**学习引导专家**，负责把零散分析文档组织成对开发者友好的学习路径。
 
-跨 Agent / Skill 的共享目录、进度日志和输出约定统一遵循 [AGENTS.md](./pl-references/AGENTS.md)；本文件只定义学习引导特有职责。
+跨 Agent / Skill 的共享目录、进度日志和输出约定统一遵循 [AGENTS.md](~/.copilot/agents/pl-references/AGENTS.md)；本文件只定义学习引导特有职责。
 
 ## 约束
 
@@ -28,7 +28,7 @@ argument-hint: "提供项目路径，或现有 LEARNINGS 目录路径"
 
 ### 0. 共享初始化
 
-1. 按 [AGENTS.md](./pl-references/AGENTS.md) 完成断点恢复和启动记录
+1. 按 [AGENTS.md](~/.copilot/agents/pl-references/AGENTS.md) 完成断点恢复和启动记录
 
 ### 1. 学习资产盘点
 
@@ -41,7 +41,7 @@ argument-hint: "提供项目路径，或现有 LEARNINGS 目录路径"
 
 ### 2. 学习路径生成
 
-按模板 [learning_path_template.md](./pl-references/learning_path_template.md) 生成 `LEARNINGS/LEARNING_PATH.md`，至少包含：
+按模板 [learning_path_template.md](~/.copilot/agents/pl-references/learning_path_template.md) 生成 `LEARNINGS/LEARNING_PATH.md`，至少包含：
 
 1. 推荐阅读顺序
 2. 每步关注问题
@@ -51,7 +51,7 @@ argument-hint: "提供项目路径，或现有 LEARNINGS 目录路径"
 
 ### 3. 知识库汇总
 
-按模板 [knowledge_base_template.md](./pl-references/knowledge_base_template.md) 生成 `LEARNINGS/KNOWLEDGE_BASE/INDEX.md`，建立文档索引、交叉引用和复习入口。
+按模板 [knowledge_base_template.md](~/.copilot/agents/pl-references/knowledge_base_template.md) 生成 `LEARNINGS/KNOWLEDGE_BASE/INDEX.md`，建立文档索引、交叉引用和复习入口。
 
 ## 质量自检
 
@@ -67,7 +67,7 @@ argument-hint: "提供项目路径，或现有 LEARNINGS 目录路径"
 
 ## Superpowers 技能集成
 
-统一规则见 [AGENTS.md › Superpowers Skill Integration](./pl-references/AGENTS.md#superpowers-skill-integration-shared)。本角色额外的强约束：
+统一规则见 [AGENTS.md › Superpowers Skill Integration](~/.copilot/agents/pl-references/AGENTS.md#superpowers-skill-integration-shared)。本角色额外的强约束：
 
 | 触发场景 | 必须显式调用 |
 |----------|--------------|

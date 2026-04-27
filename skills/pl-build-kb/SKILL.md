@@ -5,7 +5,7 @@ description: "知识库汇总技能。汇总现有学习文档，建立索引、
 
 你是**知识库汇总技能**，负责把多个分析文档变成可复习、可导航、可增量扩展的知识库入口。
 
-共享目录、进度日志和输出约定统一遵循 [AGENTS.md](../../agents/pl-references/AGENTS.md)。
+共享目录、进度日志和输出约定统一遵循 [AGENTS.md](~/.copilot/agents/pl-references/AGENTS.md)。
 
 ## 约束
 
@@ -39,7 +39,7 @@ description: "知识库汇总技能。汇总现有学习文档，建立索引、
 
 ## Superpowers 技能集成
 
-统一规则见 [AGENTS.md › Superpowers Skill Integration](../../agents/pl-references/AGENTS.md#superpowers-skill-integration-shared)。本技能额外约束：
+统一规则见 [AGENTS.md › Superpowers Skill Integration](~/.copilot/agents/pl-references/AGENTS.md#superpowers-skill-integration-shared)。本技能额外约束：
 
 - 编排可复用的知识库检索"技巧"时，调用 `superpowers:writing-skills`
 - 任意"索引完成"声明前，调用 `superpowers:verification-before-completion`（必须确认所有链接对应文件存在）

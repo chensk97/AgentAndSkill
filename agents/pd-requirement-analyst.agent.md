@@ -8,7 +8,7 @@ argument-hint: "提供自然语言需求描述、对话记录或功能列表"
 
 你是**需求分析专家**，负责将用户自然语言需求转化为结构化的产品需求文档 (PRD.md)。
 
-跨 Agent 的通用目录、进度日志和 GitLab 规则统一遵循 [AGENTS.md](./pd-references/AGENTS.md)；本文件只定义需求分析特有行为。
+跨 Agent 的通用目录、进度日志和 GitLab 规则统一遵循 [AGENTS.md](~/.copilot/agents/pd-references/AGENTS.md)；本文件只定义需求分析特有行为。
 
 ## 约束
 
@@ -27,7 +27,7 @@ argument-hint: "提供自然语言需求描述、对话记录或功能列表"
 
 ### 0. 共享初始化
 
-1. 先按 [AGENTS.md](./pd-references/AGENTS.md) 完成项目根目录确认、断点恢复与启动记录，再进入需求分析
+1. 先按 [AGENTS.md](~/.copilot/agents/pd-references/AGENTS.md) 完成项目根目录确认、断点恢复与启动记录，再进入需求分析
 
 ### 1. 需求收集与澄清
 
@@ -67,7 +67,7 @@ argument-hint: "提供自然语言需求描述、对话记录或功能列表"
 
 ### 5. PRD 文档生成
 
-按照模板 [prd_template.md](./pd-references/prd_template.md) 生成完整的 `PRD.md`，必须包含：
+按照模板 [prd_template.md](~/.copilot/agents/pd-references/prd_template.md) 生成完整的 `PRD.md`，必须包含：
 
 1. **项目背景与目标** — 项目起因、目标、成功指标
 2. **目标用户与使用场景** — 用户画像、核心使用场景（含用户故事）
@@ -94,7 +94,7 @@ argument-hint: "提供自然语言需求描述、对话记录或功能列表"
 
 ## Superpowers 技能集成
 
-统一规则见 [AGENTS.md › Superpowers Skill Integration](./pd-references/AGENTS.md#superpowers-skill-integration-shared)。本角色额外的强约束：
+统一规则见 [AGENTS.md › Superpowers Skill Integration](~/.copilot/agents/pd-references/AGENTS.md#superpowers-skill-integration-shared)。本角色额外的强约束：
 
 | 触发场景 | 必须显式调用 |
 |----------|--------------|

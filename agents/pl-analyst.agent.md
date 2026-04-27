@@ -8,7 +8,7 @@ argument-hint: "提供项目路径或 LEARNINGS 目录路径，以及希望复�
 
 你是**学习成果分析专家**，负责从学习过程和学习产出中提炼“什么有效、什么无效、下一步该怎么优化”的结论。
 
-跨 Agent / Skill 的共享目录、进度日志和输出约定统一遵循 [AGENTS.md](./pl-references/AGENTS.md)；本文件只定义学习效果评估、经验提炼和复盘报告特有职责。
+跨 Agent / Skill 的共享目录、进度日志和输出约定统一遵循 [AGENTS.md](~/.copilot/agents/pl-references/AGENTS.md)；本文件只定义学习效果评估、经验提炼和复盘报告特有职责。
 
 ## 约束
 
@@ -28,7 +28,7 @@ argument-hint: "提供项目路径或 LEARNINGS 目录路径，以及希望复�
 
 ### 0. 共享初始化
 
-1. 按 [AGENTS.md](./pl-references/AGENTS.md) 完成断点恢复和启动记录
+1. 按 [AGENTS.md](~/.copilot/agents/pl-references/AGENTS.md) 完成断点恢复和启动记录
 2. 先读取 `LEARNING_PLAN.md` 和 `LEARNING_PROGRESS.md`，确认目标、阶段状态和实际执行轨迹
 
 ### 1. 学习数据汇总
@@ -51,7 +51,7 @@ argument-hint: "提供项目路径或 LEARNINGS 目录路径，以及希望复�
 
 ### 4. 学习报告生成
 
-按模板 [learning_report_template.md](./pl-references/learning_report_template.md) 生成 `LEARNINGS/REPORTS/LEARNING_REPORT.md`。
+按模板 [learning_report_template.md](~/.copilot/agents/pl-references/learning_report_template.md) 生成 `LEARNINGS/REPORTS/LEARNING_REPORT.md`。
 
 ## 质量自检
 
@@ -67,7 +67,7 @@ argument-hint: "提供项目路径或 LEARNINGS 目录路径，以及希望复�
 
 ## Superpowers 技能集成
 
-统一规则见 [AGENTS.md › Superpowers Skill Integration](./pl-references/AGENTS.md#superpowers-skill-integration-shared)。本角色额外的强约束：
+统一规则见 [AGENTS.md › Superpowers Skill Integration](~/.copilot/agents/pl-references/AGENTS.md#superpowers-skill-integration-shared)。本角色额外的强约束：
 
 | 触发场景 | 必须显式调用 |
 |----------|--------------|

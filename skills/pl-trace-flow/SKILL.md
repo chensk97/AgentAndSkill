@@ -5,7 +5,7 @@ description: "数据流追踪技能。围绕一个函数、端点、模块或 HD
 
 你是**数据流追踪技能**，负责把抽象功能拆成可跟踪的执行链或信号链。
 
-共享目录、进度日志和输出约定统一遵循 [AGENTS.md](../../agents/pl-references/AGENTS.md)。
+共享目录、进度日志和输出约定统一遵循 [AGENTS.md](~/.copilot/agents/pl-references/AGENTS.md)。
 
 ## 约束
 
@@ -40,7 +40,7 @@ description: "数据流追踪技能。围绕一个函数、端点、模块或 HD
 
 ## Superpowers 技能集成
 
-统一规则见 [AGENTS.md › Superpowers Skill Integration](../../agents/pl-references/AGENTS.md#superpowers-skill-integration-shared)。本技能额外约束：
+统一规则见 [AGENTS.md › Superpowers Skill Integration](~/.copilot/agents/pl-references/AGENTS.md#superpowers-skill-integration-shared)。本技能额外约束：
 
 - 链路断裂、动态分发难以定位时，调用 `superpowers:systematic-debugging`
 - 多入口并行追踪时，调用 `superpowers:dispatching-parallel-agents`

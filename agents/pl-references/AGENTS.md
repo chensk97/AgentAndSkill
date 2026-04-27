@@ -1,5 +1,11 @@
 # Shared Agent and Skill Instructions
 
+## Framework File Location (HARD RULE)
+
+- This file (`AGENTS.md`) and every `*_template.md` referenced from any `pl-*.agent.md` or `pl-*` skill live **only** under `~/.copilot/agents/pl-references/`.
+- All cross-references to this directory inside agent / skill files MUST use the absolute path `~/.copilot/agents/pl-references/...`. Never resolve them relative to the user's project working directory.
+- If an agent or skill fails to read a path under `~/.copilot/agents/pl-references/`, it MUST stop and report the error to the user (suggest checking that `~/.copilot/agents/pl-references/` exists). It is **forbidden** to silently regenerate `AGENTS.md` or any template inside the user's project (e.g. under `LEARNINGS/`, `pl-references/`, or repo root). The framework files are read-only inputs, not artifacts to be reproduced per project.
+
 ## Scope
 
 - This file defines shared rules for all `../*.agent.md` files in this suite and all `../../skills/*/SKILL.md` files under `../../skills/`.
@@ -27,6 +33,25 @@
 - `LEARNINGS/SUPPORT/SUPPORT_LOG.md`
 - `LEARNINGS/REPORTS/LEARNING_REPORT.md`
 - `LEARNINGS/KNOWLEDGE_BASE/INDEX.md`
+
+## Document Versioning And Archival (multi-round learning)
+
+The same project is often re-studied across multiple rounds with supplementary goals, producing versioned files (e.g. `LEARNING_PLAN_R2.md`, `PROJECT_MAP_round3.md`, `LEARNING_REPORT_v2.md`). To keep `LEARNINGS/` clean, every agent / skill MUST follow these rules:
+
+- The **canonical / latest** version of each artifact keeps its base name at the canonical path defined in *Shared Output Layout* above (e.g. `LEARNINGS/LEARNING_PLAN.md`, `LEARNINGS/PROJECT_MAP.md`, `LEARNINGS/REPORTS/LEARNING_REPORT.md`).
+- All **historical / round-suffixed** versions MUST be moved into a per-artifact archive subfolder:
+  - `LEARNINGS/PLAN/` — for `LEARNING_PLAN_R*.md`, `LEARNING_PLAN_round*.md`
+  - `LEARNINGS/MAP/` — for `PROJECT_MAP_*`, `DEPENDENCY_MAP_*` historical versions
+  - `LEARNINGS/PATH/` — for historical `LEARNING_PATH_*`
+  - `LEARNINGS/DEEP_DIVE/<module>/` — for per-module historical deep dives
+  - `LEARNINGS/FLOWS/<topic>/` — for per-topic historical flow docs
+  - `LEARNINGS/REPORTS/HISTORY/` — for historical `LEARNING_REPORT_*`
+  - `LEARNINGS/Other/` — fallback bucket; the audit phase must reclassify these later
+- When a new learning round starts, the agent producing a new version MUST:
+  1. Move the previous canonical file into the matching archive subfolder, renaming with an explicit round suffix (e.g. `LEARNING_PLAN_round2.md`).
+  2. Write the new content as the new canonical file at the original path.
+  3. Append a one-line entry to `LEARNINGS/LEARNING_PROGRESS.md` recording: artifact name, old archived path, new canonical path, round number.
+- An agent MUST NOT delete historical versions; archival is move + rename only.
 
 ## Progress Logging
 

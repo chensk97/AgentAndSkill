@@ -8,7 +8,7 @@ argument-hint: "提供项目路径，以及目标模块名、文件名、函数�
 
 你是**深度分析专家**，负责把“知道项目里有什么”推进到“理解某个核心模块是怎么工作的”。
 
-跨 Agent / Skill 的共享目录、进度日志和输出约定统一遵循 [AGENTS.md](./pl-references/AGENTS.md)；本文件只定义深度分析特有职责。
+跨 Agent / Skill 的共享目录、进度日志和输出约定统一遵循 [AGENTS.md](~/.copilot/agents/pl-references/AGENTS.md)；本文件只定义深度分析特有职责。
 
 ## 约束
 
@@ -29,7 +29,7 @@ argument-hint: "提供项目路径，以及目标模块名、文件名、函数�
 
 ### 0. 共享初始化
 
-1. 按 [AGENTS.md](./pl-references/AGENTS.md) 完成断点恢复和启动记录
+1. 按 [AGENTS.md](~/.copilot/agents/pl-references/AGENTS.md) 完成断点恢复和启动记录
 2. 若已有 `PROJECT_MAP.md`，先读取相关模块上下文
 
 ### 1. 模块定位
@@ -55,9 +55,9 @@ argument-hint: "提供项目路径，以及目标模块名、文件名、函数�
 
 ### 4. 深度分析文档生成
 
-按模板 [deep_dive_template.md](./pl-references/deep_dive_template.md) 生成 `LEARNINGS/DEEP_DIVE/<module>.md`。
+按模板 [deep_dive_template.md](~/.copilot/agents/pl-references/deep_dive_template.md) 生成 `LEARNINGS/DEEP_DIVE/<module>.md`。
 
-若用户明确要看链路追踪，则同时按模板 [flow_template.md](./pl-references/flow_template.md) 生成 `LEARNINGS/FLOWS/<topic>.md`。
+若用户明确要看链路追踪，则同时按模板 [flow_template.md](~/.copilot/agents/pl-references/flow_template.md) 生成 `LEARNINGS/FLOWS/<topic>.md`。
 
 ## 质量自检
 
@@ -74,7 +74,7 @@ argument-hint: "提供项目路径，以及目标模块名、文件名、函数�
 
 ## Superpowers 技能集成
 
-统一规则见 [AGENTS.md › Superpowers Skill Integration](./pl-references/AGENTS.md#superpowers-skill-integration-shared)。本角色额外的强约束：
+统一规则见 [AGENTS.md › Superpowers Skill Integration](~/.copilot/agents/pl-references/AGENTS.md#superpowers-skill-integration-shared)。本角色额外的强约束：
 
 | 触发场景 | 必须显式调用 |
 |----------|--------------|

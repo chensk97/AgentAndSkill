@@ -1,5 +1,11 @@
 # Shared Agent Instructions
 
+## Framework File Location (HARD RULE)
+
+- This file (`AGENTS.md`) and every `*_template.md` referenced from any `*.agent.md` live **only** under `~/.copilot/agents/pd-references/`.
+- All cross-references to this directory inside agent / skill files MUST use the absolute path `~/.copilot/agents/pd-references/...`. Never resolve them relative to the user's project working directory.
+- If an agent fails to read a path under `~/.copilot/agents/pd-references/`, it MUST stop and report the error to the user (suggest checking that `~/.copilot/agents/pd-references/` exists). It is **forbidden** to silently regenerate `AGENTS.md` or any template inside the user's project (e.g. under `Agent_doc/`, `pd-references/`, or repo root). The framework files are read-only inputs, not artifacts to be reproduced per project.
+
 ## Scope
 
 - This file defines cross-agent rules for all `*.agent.md` files in this directory.
@@ -18,6 +24,25 @@
 	- `<project_root>/Agent_doc/pd-qa-tester-doc/Test_Cases_<任务标识>.md`
 	- `<project_root>/Agent_doc/pd-qa-tester-doc/Test_Report_<任务标识>.md`
 - Use `<project_root>/Agent_doc/Agent_Progress_Log.md` as the single shared progress and recovery log.
+
+## Document Versioning And Archival (multi-round projects)
+
+Most projects in this workspace go through multiple rounds of supplementary requirements / fixes, which produces multiple versions of the same artifact (e.g. `PRD.md`, `PRD_R2.md`, `PRD_round3.md`, `Quality_Check_Report_round4.md`). To prevent `Agent_doc/` from devolving into a flat dump, every agent MUST follow these rules:
+
+- The **canonical / latest** version of each artifact keeps its base name at the top level of `Agent_doc/`:
+  - `Agent_doc/PRD.md`, `Agent_doc/System_Architecture_and_Task_Breakdown.md`, `Agent_doc/Quality_Check_Report.md`, `Agent_doc/Agent_Progress_Log.md`
+- All **historical / round-suffixed** versions of the same artifact MUST be moved (or written directly) into a per-artifact subfolder using these canonical names:
+  - `Agent_doc/PRD/` — for `PRD_R*.md`, `PRD_round*.md`, `PRD_v*.md`, etc.
+  - `Agent_doc/Architecture/` — for `System_Architecture*_round*.md`, `arch_breakdown_log*.md`, etc.
+  - `Agent_doc/QualityCheck/` — for `Quality_Check_Report_round*.md`, `qa_log*.md`, etc.
+  - `Agent_doc/pd-developer-doc/<module>/` — for round-suffixed `README_<module>_R*.md` and per-module change logs
+  - `Agent_doc/pd-qa-tester-doc/TestCases/` and `Agent_doc/pd-qa-tester-doc/TestReport/` — for round-suffixed `Test_Cases_*` / `Test_Report_*` / `functional_test_report_round*.md`
+  - `Agent_doc/Other/` — fallback bucket for any historical document whose category is not obvious; the audit phase must reclassify these later
+- When a new round starts, the agent producing a new version MUST:
+  1. Move the previous canonical file into the matching `Agent_doc/<DocType>/` subfolder, renaming with an explicit round suffix (e.g. `PRD_round3.md`).
+  2. Write the new content as the new canonical top-level file (`Agent_doc/PRD.md`).
+  3. Append a one-line entry to `Agent_doc/Agent_Progress_Log.md` recording: artifact name, old archived path, new canonical path, round number.
+- An agent MUST NOT delete historical versions; archival is move + rename only.
 
 ## Path Validation And Maintenance
 

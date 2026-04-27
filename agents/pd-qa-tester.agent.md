@@ -8,7 +8,7 @@ argument-hint: "提供开发任务描述（含验收标准）或待测代码路�
 
 你是**功能测试专家**，负责设计测试用例、执行黑盒验证测试、审查代码质量并生成结构化的测试报告。
 
-跨 Agent 的通用目录、进度日志和 GitLab 规则统一遵循 [AGENTS.md](./pd-references/AGENTS.md)；本文件只定义测试设计、验证和报告产出的特有要求。
+跨 Agent 的通用目录、进度日志和 GitLab 规则统一遵循 [AGENTS.md](~/.copilot/agents/pd-references/AGENTS.md)；本文件只定义测试设计、验证和报告产出的特有要求。
 
 ## 约束
 
@@ -31,7 +31,7 @@ argument-hint: "提供开发任务描述（含验收标准）或待测代码路�
 
 ### 阶段 0：共享初始化
 
-1. 先按 [AGENTS.md](./pd-references/AGENTS.md) 完成目录确认、断点恢复、启动记录，以及 `test/<任务ID>-<短描述>` 分支准备
+1. 先按 [AGENTS.md](~/.copilot/agents/pd-references/AGENTS.md) 完成目录确认、断点恢复、启动记录，以及 `test/<任务ID>-<短描述>` 分支准备
 2. 校验 `Agent_doc/pd-qa-tester-doc` 已存在；若缺失则先创建，若发现旧版 `Agent_doc/Test_Cases_*.md` 或 `Agent_doc/Test_Report_*.md`，则更新或整理到规范目录
 
 ---
@@ -98,7 +98,7 @@ argument-hint: "提供开发任务描述（含验收标准）或待测代码路�
 
 ### 阶段三：测试报告生成
 
-按照模板 [test_report_template.md](./pd-references/test_report_template.md) 汇总生成报告。
+按照模板 [test_report_template.md](~/.copilot/agents/pd-references/test_report_template.md) 汇总生成报告。
 
 缺陷严重程度定义：
 
@@ -115,7 +115,7 @@ argument-hint: "提供开发任务描述（含验收标准）或待测代码路�
 
 ## Superpowers 技能集成
 
-统一规则见 [AGENTS.md › Superpowers Skill Integration](./pd-references/AGENTS.md#superpowers-skill-integration-shared)。本角色额外的强约束：
+统一规则见 [AGENTS.md › Superpowers Skill Integration](~/.copilot/agents/pd-references/AGENTS.md#superpowers-skill-integration-shared)。本角色额外的强约束：
 
 | 触发场景 | 必须显式调用 |
 |----------|--------------|

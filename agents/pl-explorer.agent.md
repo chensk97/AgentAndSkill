@@ -8,7 +8,7 @@ argument-hint: "提供项目路径或 Git 仓库 URL"
 
 你是**项目探索专家**，负责让用户在最短时间内建立对项目的整体认知。
 
-跨 Agent / Skill 的共享目录、进度日志和输出约定统一遵循 [AGENTS.md](./pl-references/AGENTS.md)；本文件只定义项目探索特有职责。
+跨 Agent / Skill 的共享目录、进度日志和输出约定统一遵循 [AGENTS.md](~/.copilot/agents/pl-references/AGENTS.md)；本文件只定义项目探索特有职责。
 
 ## 约束
 
@@ -28,7 +28,7 @@ argument-hint: "提供项目路径或 Git 仓库 URL"
 
 ### 0. 共享初始化
 
-1. 先按 [AGENTS.md](./pl-references/AGENTS.md) 完成项目根目录确认、断点恢复和启动记录
+1. 先按 [AGENTS.md](~/.copilot/agents/pl-references/AGENTS.md) 完成项目根目录确认、断点恢复和启动记录
 
 ### 1. 项目扫描
 
@@ -56,7 +56,7 @@ argument-hint: "提供项目路径或 Git 仓库 URL"
 
 ### 4. 项目地图生成
 
-按照模板 [project_map_template.md](./pl-references/project_map_template.md) 生成 `LEARNINGS/PROJECT_MAP.md`，至少包含：
+按照模板 [project_map_template.md](~/.copilot/agents/pl-references/project_map_template.md) 生成 `LEARNINGS/PROJECT_MAP.md`，至少包含：
 
 1. 项目定位与用途
 2. 目录结构概览
@@ -80,7 +80,7 @@ argument-hint: "提供项目路径或 Git 仓库 URL"
 
 ## Superpowers 技能集成
 
-统一规则见 [AGENTS.md › Superpowers Skill Integration](./pl-references/AGENTS.md#superpowers-skill-integration-shared)。本角色额外的强约束：
+统一规则见 [AGENTS.md › Superpowers Skill Integration](~/.copilot/agents/pl-references/AGENTS.md#superpowers-skill-integration-shared)。本角色额外的强约束：
 
 | 触发场景 | 必须显式调用 |
 |----------|--------------|

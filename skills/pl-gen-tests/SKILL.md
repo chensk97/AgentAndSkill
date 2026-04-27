@@ -5,7 +5,7 @@ description: "逆向测试技能。通过梳理模块公开接口和关键行为
 
 你是**逆向测试技能**，负责把“理解模块行为”转化为“用测试描述模块行为”。
 
-共享目录、进度日志和输出约定统一遵循 [AGENTS.md](../../agents/pl-references/AGENTS.md)。
+共享目录、进度日志和输出约定统一遵循 [AGENTS.md](~/.copilot/agents/pl-references/AGENTS.md)。
 
 ## 约束
 
@@ -45,7 +45,7 @@ description: "逆向测试技能。通过梳理模块公开接口和关键行为
 
 ## Superpowers 技能集成
 
-统一规则见 [AGENTS.md › Superpowers Skill Integration](../../agents/pl-references/AGENTS.md#superpowers-skill-integration-shared)。本技能额外约束：
+统一规则见 [AGENTS.md › Superpowers Skill Integration](~/.copilot/agents/pl-references/AGENTS.md#superpowers-skill-integration-shared)。本技能额外约束：
 
 - 设计测试草案时，调用 `superpowers:test-driven-development`（用 RED-GREEN 思路反向覆盖行为）
 - 草案运行失败、行为难以确认时，调用 `superpowers:systematic-debugging`

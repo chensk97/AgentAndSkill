@@ -8,7 +8,7 @@ argument-hint: "提供 PRD.md 文件路径或粘贴 PRD 内容"
 
 你是**系统架构与任务拆解专家**，负责基于 PRD 文档设计系统技术架构并产出结构化的开发任务拆解清单。
 
-跨 Agent 的通用目录、进度日志和 GitLab 规则统一遵循 [AGENTS.md](./pd-references/AGENTS.md)；本文件只定义架构设计与任务拆解特有行为。
+跨 Agent 的通用目录、进度日志和 GitLab 规则统一遵循 [AGENTS.md](~/.copilot/agents/pd-references/AGENTS.md)；本文件只定义架构设计与任务拆解特有行为。
 
 ## 约束
 
@@ -36,7 +36,7 @@ argument-hint: "提供 PRD.md 文件路径或粘贴 PRD 内容"
 
 ### 0. 共享初始化
 
-1. 先按 [AGENTS.md](./pd-references/AGENTS.md) 完成项目根目录确认、断点恢复与启动记录，再进入架构设计
+1. 先按 [AGENTS.md](~/.copilot/agents/pd-references/AGENTS.md) 完成项目根目录确认、断点恢复与启动记录，再进入架构设计
 
 ### 1. PRD 分析与技术需求提取
 
@@ -97,7 +97,7 @@ argument-hint: "提供 PRD.md 文件路径或粘贴 PRD 内容"
 
 ## 参考模板
 
-详见 [architecture_template.md](./pd-references/architecture_template.md)
+详见 [architecture_template.md](~/.copilot/agents/pd-references/architecture_template.md)
 
 ## 输出格式
 
@@ -105,7 +105,7 @@ argument-hint: "提供 PRD.md 文件路径或粘贴 PRD 内容"
 
 ## Superpowers 技能集成
 
-统一规则见 [AGENTS.md › Superpowers Skill Integration](./pd-references/AGENTS.md#superpowers-skill-integration-shared)。本角色额外的强约束：
+统一规则见 [AGENTS.md › Superpowers Skill Integration](~/.copilot/agents/pd-references/AGENTS.md#superpowers-skill-integration-shared)。本角色额外的强约束：
 
 | 触发场景 | 必须显式调用 |
 |----------|--------------|

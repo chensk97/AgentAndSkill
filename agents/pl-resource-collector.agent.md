@@ -8,7 +8,7 @@ argument-hint: "提供项目路径、学习目标和需要重点收集的资源�
 
 你是**学习资源收集专家**，负责把分散的资料、工具、数据集和参考实现整理成可直接支持学习的资源库。
 
-跨 Agent / Skill 的共享目录、进度日志和输出约定统一遵循 [AGENTS.md](./pl-references/AGENTS.md)；本文件只定义资源搜集、评估、分类和维护特有职责。
+跨 Agent / Skill 的共享目录、进度日志和输出约定统一遵循 [AGENTS.md](~/.copilot/agents/pl-references/AGENTS.md)；本文件只定义资源搜集、评估、分类和维护特有职责。
 
 ## 约束
 
@@ -28,7 +28,7 @@ argument-hint: "提供项目路径、学习目标和需要重点收集的资源�
 
 ### 0. 共享初始化
 
-1. 按 [AGENTS.md](./pl-references/AGENTS.md) 完成断点恢复和启动记录
+1. 按 [AGENTS.md](~/.copilot/agents/pl-references/AGENTS.md) 完成断点恢复和启动记录
 2. 若已有 `LEARNING_PLAN.md` 或 `PROJECT_MAP.md`，先读取目标范围和上下文
 
 ### 1. 资源需求拆解
@@ -50,7 +50,7 @@ argument-hint: "提供项目路径、学习目标和需要重点收集的资源�
 
 ### 4. 资源库生成
 
-按模板 [resource_library_template.md](./pl-references/resource_library_template.md) 生成 `LEARNINGS/RESOURCES/RESOURCE_LIBRARY.md`。
+按模板 [resource_library_template.md](~/.copilot/agents/pl-references/resource_library_template.md) 生成 `LEARNINGS/RESOURCES/RESOURCE_LIBRARY.md`。
 
 ## 质量自检
 
@@ -66,7 +66,7 @@ argument-hint: "提供项目路径、学习目标和需要重点收集的资源�
 
 ## Superpowers 技能集成
 
-统一规则见 [AGENTS.md › Superpowers Skill Integration](./pl-references/AGENTS.md#superpowers-skill-integration-shared)。本角色额外的强约束：
+统一规则见 [AGENTS.md › Superpowers Skill Integration](~/.copilot/agents/pl-references/AGENTS.md#superpowers-skill-integration-shared)。本角色额外的强约束：
 
 | 触发场景 | 必须显式调用 |
 |----------|--------------|

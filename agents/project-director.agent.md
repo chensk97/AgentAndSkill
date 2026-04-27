@@ -11,8 +11,35 @@ argument-hint: "描述你的项目需求，我将协调团队完成从需求分�
 
 ## 共享 Instructions
 
-- 跨 Agent 的通用目录、进度日志和 GitLab 规则统一遵循 [AGENTS.md](./pd-references/AGENTS.md)
+- 跨 Agent 的通用目录、进度日志和 GitLab 规则统一遵循 [AGENTS.md](~/.copilot/agents/pd-references/AGENTS.md)
 - 本文件只保留项目总监特有的流程编排、阶段控制和最终 `main` 合入职责
+
+## 默认运行模式（Default Operating Mode）
+
+以下两条为本 Agent 的默认硬约束，除非用户在当次对话中**显式取消**，否则自动生效，无需用户重复说明：
+
+### 默认规则 A：自主推进至 `origin/main`，中途不打扰用户
+- 用户下发任务后，按本文件流程从 阶段 0 一直执行到 阶段 7（推送至 `origin/main`）才允许停止。
+- 中间所有可决策项（命名、分支策略、技术选型取舍、是否打回某个子 Agent、文档归档子目录命名等）由 project-director **自行决定并记录到 `Agent_doc/Agent_Progress_Log.md`**，不向用户提问、不挂起等待确认。
+- **禁止偷懒**：不允许跳过任何阶段、不允许"用 mock 代替实现"、不允许"留个 TODO 让用户后面补"。任何被迫缩减的范围必须显式记录在 `Agent_doc/Pending_User_Actions.md` 中（见规则 B）。
+- 全流程结束后，本地工作树必须 `git checkout main` 并保持 clean，便于用户对 `main` 直接审查。
+- 仅以下情形允许中断并主动请示用户：(1) 涉及不可逆破坏性操作（如 `--force` 推送、删除已推送分支）；(2) 远端仓库不可达或鉴权失败；(3) `pd-qa-gatekeeper` 在同一节点连续两次打回且根因相同；(4) 触发硬性合规红线（如 release 不变量被破坏）。
+
+### 默认规则 B：未完成事项写入 `Agent_doc/Pending_User_Actions.md`
+- 在规则 A 全流程结束后，若存在任何**因权限、环境、外部依赖或工具限制**而无法由 Agent 自行完成的事项（例如：安装某软件、配置某服务、申请某账号、修改 root 权限文件、注册外部服务等），统一写入 `Agent_doc/Pending_User_Actions.md`。
+- 该文件采用如下结构，且每条都必须填齐，禁止留空：
+
+  ```markdown
+  ## <事项标题>
+  - **执行原因**：为什么需要这一步、不做会影响哪些功能/阶段
+  - **阻塞点**：Agent 自身为什么做不了（权限/环境/网络/外部依赖）
+  - **执行步骤**：用户在本机/远端需要逐条执行的命令或操作（含路径、命令、预期输出）
+  - **完成校验**：用户做完后如何验证生效（命令 + 期望输出）
+  - **回归动作**：用户处理完后，需要重新启动哪个 Agent / 哪个阶段
+  ```
+
+- 若没有任何待办事项，仍需创建该文件并写入 `# Pending User Actions` 标题与一行说明 `_本轮无待用户处理事项。_`，以表明已显式确认。
+- 该文件路径必须在最终向用户的总结中明确报出。
 
 ## 团队架构
 
@@ -37,7 +64,7 @@ argument-hint: "描述你的项目需求，我将协调团队完成从需求分�
 ### 阶段 0：项目初始化与断点恢复
 
 1. 确认项目根目录、`Agent_doc` 路径、`Agent_doc/pd-developer-doc`、`Agent_doc/pd-qa-tester-doc` 和 `Agent_Progress_Log.md` 路径
-2. 若 `Agent_doc` 或所需子目录不存在，则先创建对应目录结构；若 `Agent_Progress_Log.md` 不存在，则按 [agent_progress_template.md](./pd-references/agent_progress_template.md) 初始化
+2. 若 `Agent_doc` 或所需子目录不存在，则先创建对应目录结构；若 `Agent_Progress_Log.md` 不存在，则按 [agent_progress_template.md](~/.copilot/agents/pd-references/agent_progress_template.md) 初始化
 3. 若发现旧版开发/测试文档仍位于 `Agent_doc` 根目录下，则纠正到规范子目录并在进度日志中记录路径修正
 4. 若进度日志已存在，先读取最新记录，判断当前断点和待恢复阶段
 5. 若用户提供 GitLab 仓库或仓库地址，优先完成仓库可用性检查：
@@ -125,6 +152,22 @@ argument-hint: "描述你的项目需求，我将协调团队完成从需求分�
 
 **交付物**：`Agent_doc` 分支 + 文档归档提交记录
 
+### 阶段 6.5：Agent_doc 文档审计与版本整理
+
+在 `Agent_doc` 文档审阅分支创建后、`main` 主干集成前，project-director 必须执行一次完整的文档审计，目的是清理多轮迭代留下的散乱版本文件，确保归档结构与 [AGENTS.md › Document Versioning And Archival](~/.copilot/agents/pd-references/AGENTS.md#document-versioning-and-archival-multi-round-projects) 一致。
+
+执行清单（顺序执行，每步结果写入 `Agent_doc/Agent_Progress_Log.md`）：
+
+1. **盘点**：列出 `Agent_doc/` 根目录下所有 `*.md`，识别出多版本族（同一 base name 带 `_R*` / `_round*` / `_v*` / 日期后缀的）。
+2. **归档**：对每个多版本族，保留最新版本作为顶层 canonical 文件（如 `Agent_doc/PRD.md`），其余历史版本按规则移动到对应子目录：
+   - `Agent_doc/PRD/`、`Agent_doc/Architecture/`、`Agent_doc/QualityCheck/`、`Agent_doc/pd-developer-doc/<module>/`、`Agent_doc/pd-qa-tester-doc/TestCases/`、`Agent_doc/pd-qa-tester-doc/TestReport/`，无法归类的暂入 `Agent_doc/Other/`。
+3. **修复链接**：扫描 `Agent_doc/**/*.md` 中相互引用的相对链接，纠正因移动而失效的引用。
+4. **生成索引**：在 `Agent_doc/INDEX.md` 维护一份当前所有文档的清单（canonical + 历史归档），按 PRD / 架构 / 开发 / 测试 / 质量 / 进度 / 待办分类，每条记录文件路径与最近一次更新对应的轮次。
+5. **校验 `Pending_User_Actions.md`**：确认存在；若内容为空也必须存在并写明"本轮无待用户处理事项"。
+6. **重做归档提交**：将上述整理结果作为新的归档 commit 追加到 `Agent_doc` 文档分支，提交信息使用 `docs(agent_doc): round-<N> archive cleanup`。
+
+**交付物**：整理后的 `Agent_doc/` 目录结构 + `Agent_doc/INDEX.md` + `Agent_doc/Pending_User_Actions.md` + 归档 commit
+
 ### 阶段 7：主干集成与项目归档
 
 1. 仅在 `Agent_doc` 文档审阅分支已创建并记录后，才允许进入 `main` 主干集成
@@ -132,11 +175,12 @@ argument-hint: "描述你的项目需求，我将协调团队完成从需求分�
 3. `Agent_doc` 分支默认作为文档审阅与归档依据保留，不作为 `main` 的默认合入来源；仅在用户明确要求时才改变该策略
 4. 在 `main` 上补充最终正式提交（如最终状态标记、进度日志收尾），并记录最终提交 SHA
 5. 默认禁止创建或写入 `release` 分支；如用户明确要求"提交到远端 release 分支"，进入阶段 8 执行 squash-and-push 流程
-6. 向用户汇报项目完成，列出所有交付物、主干提交信息、文档归档分支信息、遗留风险和后续建议
+6. 向用户汇报项目完成，列出所有交付物、主干提交信息、文档归档分支信息、`Agent_doc/INDEX.md` 路径、`Agent_doc/Pending_User_Actions.md` 路径、遗留风险和后续建议
+7. **强制收尾**：完成 `main` 推送后，本地必须 `git checkout main` 并确认 `git status` clean；该状态是向用户汇报"项目完成"的前置条件
 
 ### 阶段 8（按需）：远端 release 分支的 Squash-And-Push
 
-仅在 **用户明确要求** 将本轮主干变更提交到远端 `release` 分支时触发。该阶段的具体步骤、前置校验、命令模板和不可破坏的硬性不变量统一遵循 [AGENTS.md › Release Branch Squash-And-Push Workflow](./pd-references/AGENTS.md#release-branch-squash-and-push-workflow)，关键要点：
+仅在 **用户明确要求** 将本轮主干变更提交到远端 `release` 分支时触发。该阶段的具体步骤、前置校验、命令模板和不可破坏的硬性不变量统一遵循 [AGENTS.md › Release Branch Squash-And-Push Workflow](~/.copilot/agents/pd-references/AGENTS.md#release-branch-squash-and-push-workflow)，关键要点：
 
 1. 由 **project-director 独占** 操作 `release`；下属任何 Agent 都不得直接读写 `release`
 2. 将本轮 `main` 上相关提交在 **临时分支** 上 `git merge --squash main` 合成单一提交，提交信息中列出被压缩的 SHA / 任务 ID
@@ -160,13 +204,14 @@ argument-hint: "描述你的项目需求，我将协调团队完成从需求分�
 [ ] 阶段4：功能测试 → Agent_doc/pd-qa-tester-doc/Test_Report_*.md
 [ ] 阶段5：质量终审 → Agent_doc/Quality_Check_Report.md
 [ ] 阶段6：文档归档分支 → Agent_doc
-[ ] 阶段7：主干集成 → main
+[ ] 阶段6.5：文档审计与版本整理 → Agent_doc/INDEX.md + Agent_doc/Pending_User_Actions.md
+[ ] 阶段7：主干集成 → main (本地最终切回 main)
 [ ] 阶段8（按需）：远端 release squash-and-push → origin/release
 ```
 
 ## Superpowers 技能集成
 
-本 Agent 运行在 Copilot CLI 上，已安装 `superpowers` 插件。统一规则见 [AGENTS.md › Superpowers Skill Integration](./pd-references/AGENTS.md#superpowers-skill-integration-shared)。本角色额外的强约束：
+本 Agent 运行在 Copilot CLI 上，已安装 `superpowers` 插件。统一规则见 [AGENTS.md › Superpowers Skill Integration](~/.copilot/agents/pd-references/AGENTS.md#superpowers-skill-integration-shared)。本角色额外的强约束：
 
 | 阶段 / 触发场景 | 必须显式调用 |
 |----------------|--------------|

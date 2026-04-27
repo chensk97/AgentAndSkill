@@ -1,6 +1,6 @@
 # pl-coordinator 导航页
 
-这套示例面向“项目学习与知识沉淀”的端到端流程。当前目录应视为未来 `.copilot/` 根目录的预演版本：`agents/` 与 `skills/` 同级，`agents/pl-references/` 负责共享规则和模板，`skills/` 下各技能保持目录化结构。
+这套示例面向“项目学习与知识沉淀”的端到端流程。当前目录仍然可以视为未来 `.copilot/` 根目录的预演版本：`agents/` 与 `skills/` 同级、`agents/pl-references/` 提供版本化的共享规则与模板说明、`skills/` 下各技能保持目录化结构；但运行时的交叉引用已经统一切换到 `~/.copilot/agents/pl-references/`。
 
 ## 1. 入口
 
@@ -11,8 +11,8 @@
 适用场景：
 
 - 想从零开始组织一轮完整的项目学习流程
-- 需要统一制定学习计划、分配角色、跟踪进度、处理阻塞和做最终复盘
-- 不确定应该先看资源、先扫项目，还是直接深挖模块，需要总控角色帮你排顺序
+- 需要统一制定学习计划、分配角色、跟踪进度、处理阻塞、输出 `Pending_User_Actions` 并做最终复盘
+- 不确定应该先看资源、先扫项目，还是直接深挖模块，希望总控角色在默认模式下尽量不中断用户
 
 ### 专项入口
 
@@ -37,6 +37,12 @@
 
 说明：技能通常更适合作为辅助工作流，由 Agent 在合适阶段触发，或者由用户通过明确任务描述去促发，而不是当作整套流程的总入口。
 
+### 共享规则入口
+
+- [agents/pl-references/AGENTS.md](../agents/pl-references/AGENTS.md)
+
+这里定义了共享输出目录、进度日志、分析约束和 Agent / Skill 协作规则。仓库中的这份文件用于阅读和版本管理；运行时所有交叉引用都必须指向 `~/.copilot/agents/pl-references/`。如果该目录缺失，Agent / Skill 应立即报错停止，而不是在 `LEARNINGS/` 或仓库根目录里再生成一套 framework 文件。
+
 ## 2. 顺序
 
 推荐顺序如下：
@@ -48,7 +54,8 @@
 5. `pl-deep-diver` 对关键模块做深挖；必要时联动 `pl-trace-flow` 与 `pl-gen-tests`。
 6. `pl-tutor` 在已有地图、深挖结果和资源库基础上组织学习路径，并汇总知识库；必要时联动 `pl-build-kb`。
 7. `pl-analyst` 对本轮学习过程、产物和效果做复盘分析。
-8. `pl-coordinator` 根据分析结果闭环，决定是否进入下一轮学习计划。
+8. `pl-coordinator` 执行阶段 5.5 的文档审计：归档历史版本、修复链接、生成 `LEARNINGS/INDEX.md`，并确认 `LEARNINGS/Pending_User_Actions.md` 存在。
+9. `pl-coordinator` 根据分析结果闭环，更新 `LEARNING_PROGRESS.md`；如果学习流程涉及 Git 推送，收尾时本地仍需切回 `main` 并保持 clean。
 
 如果只是想解决某个局部问题，可以从专项入口直接进入，不必走完整顺序。
 
@@ -58,7 +65,7 @@
 
 | 角色 | 主要职责 | 不负责什么 | 典型输出 |
 |------|----------|------------|----------|
-| `pl-coordinator` | 制定学习计划、协调阶段推进、分发上下文、跟踪阻塞、组织闭环 | 不替代其他角色做具体扫描、深挖或复盘 | `LEARNING_PLAN.md`、进度推进与阶段决策 |
+| `pl-coordinator` | 制定学习计划、协调阶段推进、分发上下文、跟踪阻塞、默认自主推进、维护 `LEARNINGS` 归档 / 索引 / `Pending_User_Actions` | 不替代其他角色做具体扫描、深挖或复盘 | `LEARNING_PLAN.md`、`LEARNINGS/INDEX.md`、进度推进与阶段决策 |
 | `pl-resource-collector` | 搜集、筛选、分类和维护学习资源 | 不做项目源码分析本身 | `RESOURCE_LIBRARY.md` |
 | `pl-explorer` | 扫描项目结构、技术栈、入口和核心模块 | 不做模块级深入解读 | `PROJECT_MAP.md` |
 | `pl-support-engineer` | 处理环境、依赖、脚本、工具和平台问题 | 不直接代替其他角色完成学习分析 | `SUPPORT_LOG.md` |
@@ -76,7 +83,15 @@
 | `pl-gen-tests` | 深挖补充阶段 | 把模块理解转成测试切入点 |
 | `pl-build-kb` | 知识沉淀阶段 | 汇总已有文档为知识库索引 |
 
-## 4. 交接
+## 4. 当前修订后的关键约束
+
+- 共享 framework 文件和模板在运行时只能从 `~/.copilot/agents/pl-references/` 读取，不能再依赖仓库内的相对路径。
+- 默认运行模式要求 `pl-coordinator` 从阶段 0 连续推进到阶段 6；中间的角色调度顺序、范围取舍和目录命名由总控自行决定，并写入 `LEARNINGS/LEARNING_PROGRESS.md`。
+- 多轮学习文档必须遵循 canonical / archive 分层：顶层保留最新文件，历史版本归档到 `LEARNINGS/PLAN/`、`MAP/`、`PATH/`、`DEEP_DIVE/<module>/`、`FLOWS/<topic>/`、`REPORTS/HISTORY/` 等目录。
+- 阶段 5.5 结束时，`LEARNINGS/INDEX.md` 和 `LEARNINGS/Pending_User_Actions.md` 都应存在；即便本轮无待办，也要显式写出“本轮无待用户处理事项”。
+- `pl-*` Agent 和 Skill 在适用场景下仍必须显式调用 `superpowers:<skill-name>`，特别是计划编排、并行拆分、调试、测试驱动和完成前验证。
+
+## 5. 交接
 
 | 上游角色/技能 | 交接产物 | 下游角色/技能 | 说明 |
 |----------------|----------|----------------|------|
@@ -87,11 +102,12 @@
 | `pl-deep-diver` | `LEARNINGS/DEEP_DIVE/*`、`LEARNINGS/FLOWS/*`、可选测试分析 | `pl-tutor`、`pl-analyst` | 深挖产物为学习路径和复盘提供核心证据 |
 | `pl-tutor` | `LEARNINGS/LEARNING_PATH.md`、`LEARNINGS/KNOWLEDGE_BASE/INDEX.md` | `pl-analyst`、`pl-coordinator` | 供复盘分析和下一轮计划使用 |
 | `pl-analyst` | `LEARNINGS/REPORTS/LEARNING_REPORT.md` | `pl-coordinator`、`pl-tutor` | 为闭环优化和下一轮学习提供依据 |
+| `pl-coordinator` | `LEARNINGS/INDEX.md`、`LEARNINGS/Pending_User_Actions.md`、更新后的 `LEARNING_PROGRESS.md` | 用户 / 下一轮迭代 | 作为本轮学习索引、遗留事项清单和下次恢复入口 |
 | `pl-scan-project` / `pl-analyze-deps` | 项目地图 / 依赖分析 | `pl-explorer`、`pl-tutor` | 通常是全景扫描的辅助技能 |
 | `pl-trace-flow` / `pl-gen-tests` | 链路分析 / 测试分析 | `pl-deep-diver`、`pl-tutor` | 通常是深挖阶段的辅助技能 |
 | `pl-build-kb` | 知识库索引 | `pl-tutor` | 通常是知识沉淀阶段的辅助技能 |
 
-## 5. 示例
+## 6. 示例
 
 ### 示例 A：从零开始组织一轮完整学习
 
@@ -99,7 +115,7 @@
 
 示例提问：
 
-> 请作为学习协调总控，围绕 `<path>` 这个项目组织一轮完整学习。目标是两周内完成全景理解、两个核心模块的深挖、学习路径整理和最后复盘。
+> 请作为学习协调总控，围绕 `<path>` 这个项目组织一轮完整学习。目标是两周内完成全景理解、两个核心模块的深挖、学习路径整理、最终复盘，并在结束前完成 `LEARNINGS` 文档审计与索引整理。
 
 ### 示例 B：我刚接手一个项目，只想先看全景
 

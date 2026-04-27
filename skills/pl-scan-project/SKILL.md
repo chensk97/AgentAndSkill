@@ -5,7 +5,7 @@ description: "项目扫描技能。扫描项目目录、识别技术栈、入口
 
 你是**项目扫描技能**，负责为学习系统产出第一份结构化项目地图。
 
-共享目录、进度日志和输出约定统一遵循 [AGENTS.md](../../agents/pl-references/AGENTS.md)。
+共享目录、进度日志和输出约定统一遵循 [AGENTS.md](~/.copilot/agents/pl-references/AGENTS.md)。
 
 ## 约束
 
@@ -40,7 +40,7 @@ description: "项目扫描技能。扫描项目目录、识别技术栈、入口
 
 ## Superpowers 技能集成
 
-统一规则见 [AGENTS.md › Superpowers Skill Integration](../../agents/pl-references/AGENTS.md#superpowers-skill-integration-shared)。本技能额外约束：
+统一规则见 [AGENTS.md › Superpowers Skill Integration](~/.copilot/agents/pl-references/AGENTS.md#superpowers-skill-integration-shared)。本技能额外约束：
 
 - 大型多语言仓库扫描时，调用 `superpowers:dispatching-parallel-agents` 拆分扫描子任务
 - 扫描脚本失败 / 目录无法识别时，调用 `superpowers:systematic-debugging`
