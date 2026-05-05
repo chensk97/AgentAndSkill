@@ -40,7 +40,7 @@
   - the mandatory completion follow-up rule
 - Before accepting a child result, marking a stage complete, or handing work to the next role, the parent agent or skill MUST perform an audit check that these constraints were actually included in the child invocation or verifiably followed in execution evidence.
 - If the parent role cannot show that the child invocation carried these constraints, the result is non-compliant by default. The parent role must either rerun the child with explicit constraints or record the non-compliance and block completion.
-- Any compliance gap found during delegation, review, or recovery MUST be written into `LEARNING_PROGRESS.md` together with the corrective action taken.
+- Any compliance gap found during delegation, review, or recovery MUST be written into `LEARNINGS/LEARNING_PROGRESS.md` together with the corrective action taken.
 
 ## Scope
 
@@ -91,7 +91,7 @@ The same project is often re-studied across multiple rounds with supplementary g
 
 ## Progress Logging
 
-- Every Agent and Skill must append a record to `LEARNING_PROGRESS.md` on start, before a phase transition, and before handoff or completion.
+- Every Agent and Skill must append a record to `LEARNINGS/LEARNING_PROGRESS.md` on start, before a phase transition, and before handoff or completion.
 - Each record should include: time, stage, role_or_skill, action, input summary, output path, current status, uncertainty or risk, and next step.
 - On restart or recovery, first read the latest unfinished or handoff record before continuing.
 
@@ -122,6 +122,9 @@ The same project is often re-studied across multiple rounds with supplementary g
 - `pl-analyst` should consume outputs from all prior roles, summarize learning effectiveness, and feed optimization suggestions back to `pl-coordinator` and `pl-tutor`.
 
 ## Superpowers Skill Integration (shared)
+
+- This repository can be synced to multiple target directories, but the runtime skill and delegation contract defined below is fully specified only for Copilot CLI today.
+- If these files are packaged to Claude Code or OpenCode, treat them as source-compatible artifacts unless the target platform also has an explicit, equivalent contract for `superpowers:*`, delegated child workflows, and completion validation. Path sync alone does not establish runtime parity.
 
 This learning suite runs on Copilot CLI alongside the `superpowers` plugin (installed as a Copilot CLI plugin, NOT a sibling folder of this repo). When a superpowers skill applies, every `pl-*` agent and skill MUST invoke the corresponding skill explicitly via the Copilot CLI `skill` tool — for example `skill superpowers:systematic-debugging` — and announce the use as required by the `superpowers:using-superpowers` skill.
 

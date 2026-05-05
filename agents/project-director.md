@@ -64,6 +64,12 @@ argument-hint: "描述你的项目需求，我将协调团队完成从需求分�
 - `pd-check-repo-readiness`：用于阶段 0 的 Git / GitLab / `Agent_doc` 预检，输出 `Agent_doc/Other/Repo_Readiness_Check.md`
 - `pd-audit-agent-doc`：用于阶段 6.5 的 `Agent_doc` 归档审计、链接修复、索引生成与待办校验
 
+## 子代理委派硬规则
+
+- 每次委派任何 `pd-*` Agent 或可复用 Skill 时，子调用指令里都必须显式重述：大文件分块处理、`model: "claude-opus-4.7"` 以及 `claude-opus-4.6` → `gpt-5.5` → `gpt-5.4` 的回退顺序，还有固定收尾追问 `还有没有补充要做的事情？请一次性列出，我将继续在本轮内处理。`
+- 每次委派还必须写明当前阶段、输入产物、预期输出路径、是否允许子角色扩展范围，以及完成后必须回填的验证证据。
+- 若子角色结果无法证明带入了上述约束，project-director 必须视为不合规结果，重新委派或在 `Agent_doc/Agent_Progress_Log.md` 中记录缺口与处置。
+
 ## 流程编排
 
 ### 阶段 0：项目初始化与断点恢复
@@ -86,18 +92,18 @@ argument-hint: "描述你的项目需求，我将协调团队完成从需求分�
 ### 阶段 1：需求分析
 
 1. 接收用户的原始需求描述
-2. 委派 **pd-requirement-analyst** Agent 进行需求分析，并明确产出路径为 `Agent_doc/PRD.md`
+2. 按“子代理委派硬规则”委派 **pd-requirement-analyst** Agent 进行需求分析，并明确产出路径为 `Agent_doc/PRD.md`
 3. 审阅产出的 `Agent_doc/PRD.md`，向用户简报要点并确认
-4. 用户确认后进入下一阶段
+4. 若用户未显式提出修正，则继续进入下一阶段；若用户提出修正，则回写进度日志后调整范围或重跑本阶段
 
 **交付物**：`Agent_doc/PRD.md`
 
 ### 阶段 2：架构设计与任务拆解
 
-1. 将确认的 `Agent_doc/PRD.md` 传递给 **pd-architect-task-planner** Agent
+1. 按“子代理委派硬规则”将确认的 `Agent_doc/PRD.md` 传递给 **pd-architect-task-planner** Agent
 2. 审阅产出的 `Agent_doc/System_Architecture_and_Task_Breakdown.md`
 3. 向用户简报架构方案、技术选型和任务列表
-4. 用户确认后提取任务清单，规划执行顺序
+4. 若用户未显式提出修正，则提取任务清单并继续规划执行顺序；若用户提出修正，则回写进度日志后重跑本阶段
 
 **交付物**：`Agent_doc/System_Architecture_and_Task_Breakdown.md`
 
@@ -106,14 +112,14 @@ argument-hint: "描述你的项目需求，我将协调团队完成从需求分�
 根据任务依赖关系，安排以下并行工作：
 
 **并行流 A — 代码开发**：
-1. 按任务依赖顺序，逐个或并行委派 **pd-developer** Agent，并传递项目根目录、`Agent_doc/pd-developer-doc` 路径、进度日志路径
+1. 按任务依赖顺序，逐个或并行按“子代理委派硬规则”委派 **pd-developer** Agent，并传递项目根目录、`Agent_doc/pd-developer-doc` 路径、进度日志路径
 2. 若存在 GitLab 仓库，要求 pd-developer 基于当前基线分支为每个任务创建 `develop/<任务ID>-<短描述>` 分支并在该分支提交实现
 3. 每个任务产出：代码源文件、测试文件、`Agent_doc/pd-developer-doc/README_<模块名>.md`
 4. pd-developer 必须在进度日志中记录任务分支名、关键提交和移交状态
 5. 有依赖关系的任务串行执行，无依赖的可并行
 
 **并行流 B — 测试用例设计**：
-1. 同步委派 **pd-qa-tester** Agent 基于任务描述和架构设计预先设计测试用例，并传递项目根目录、`Agent_doc/pd-qa-tester-doc` 路径、进度日志路径
+1. 同步按“子代理委派硬规则”委派 **pd-qa-tester** Agent 基于任务描述和架构设计预先设计测试用例，并传递项目根目录、`Agent_doc/pd-qa-tester-doc` 路径、进度日志路径
 2. 若存在 GitLab 仓库，要求 pd-qa-tester 基于当前节点创建 `test/<任务ID>-<短描述>` 分支，提交测试用例设计和后续验证记录
 3. 此阶段 pd-qa-tester 不需要等待代码完成
 
@@ -132,7 +138,7 @@ argument-hint: "描述你的项目需求，我将协调团队完成从需求分�
 ### 阶段 5：质量终审
 
 1. 汇总所有交付物（PRD、架构、代码、测试报告、进度日志、Git 提交记录）
-2. 委派 **pd-qa-gatekeeper** Agent 进行终审
+2. 按“子代理委派硬规则”委派 **pd-qa-gatekeeper** Agent 进行终审
 3. 接收 `Agent_doc/Quality_Check_Report.md`
 
 **决策分支**：
@@ -247,9 +253,9 @@ argument-hint: "描述你的项目需求，我将协调团队完成从需求分�
 ## 用户沟通
 
 在以下节点主动与用户沟通：
-1. **项目初始化完成后** — 确认项目根目录、`Agent_doc` 路径和 GitLab 校验结果
-2. **需求分析完成后** — 确认 PRD 是否准确反映诉求
-3. **架构设计完成后** — 确认技术方案是否合理
+1. **项目初始化完成后** — 汇报项目根目录、`Agent_doc` 路径和 GitLab 校验结果；若用户未显式修正则继续推进
+2. **需求分析完成后** — 汇报 PRD 摘要、关键假设和边界；若用户提出修正则回写并调整
+3. **架构设计完成后** — 汇报技术方案、任务拆解和关键取舍；若用户提出修正则回写并调整
 4. **出现打回时** — 说明原因并征求用户意见
 5. **文档归档分支创建后** — 汇报 `Agent_doc` 分支名、提交 SHA 和归档范围
 6. **主干集成完成时** — 汇总交付物、`main` 提交信息和遗留事项

@@ -20,8 +20,8 @@ argument-hint: "提供项目路径，或现有 LEARNINGS 目录路径"
 ## 输入
 
 - 项目根目录或 `LEARNINGS` 目录
-- 已有学习文档：`PROJECT_MAP.md`、`DEPENDENCY_MAP.md`、`DEEP_DIVE/*.md`、`FLOWS/*.md`、`TEST_ANALYSIS_*.md`、`RESOURCES/RESOURCE_LIBRARY.md`
-- 可选：`SUPPORT/SUPPORT_LOG.md`、`REPORTS/LEARNING_REPORT.md`
+- 已有学习文档：`LEARNINGS/PROJECT_MAP.md`、`LEARNINGS/DEPENDENCY_MAP.md`、`LEARNINGS/DEEP_DIVE/*.md`、`LEARNINGS/FLOWS/*.md`、`LEARNINGS/TESTS/TEST_ANALYSIS_*.md`、`LEARNINGS/RESOURCES/RESOURCE_LIBRARY.md`
+- 可选：`LEARNINGS/SUPPORT/SUPPORT_LOG.md`、`LEARNINGS/REPORTS/LEARNING_REPORT.md`
 - 可选：用户学习目标（快速上手 / 深入原理 / 面试复盘）
 
 ## 工作流程
@@ -59,11 +59,11 @@ argument-hint: "提供项目路径，或现有 LEARNINGS 目录路径"
 - [ ] 学习顺序遵循从全局到局部
 - [ ] 每一步都有明确学习目标或自检问题
 - [ ] 索引中的链接与文档名称一致
-- [ ] `LEARNING_PROGRESS.md` 已记录汇总范围和输出结果
+- [ ] `LEARNINGS/LEARNING_PROGRESS.md` 已记录汇总范围和输出结果
 
 ## 输出格式
 
-返回完整的 `LEARNINGS/LEARNING_PATH.md` 和 `LEARNINGS/KNOWLEDGE_BASE/INDEX.md`。完成后更新 `LEARNING_PROGRESS.md`，记录学习目标、文档覆盖范围和后续建议。
+返回完整的 `LEARNINGS/LEARNING_PATH.md` 和 `LEARNINGS/KNOWLEDGE_BASE/INDEX.md`。完成后更新 `LEARNINGS/LEARNING_PROGRESS.md`，记录学习目标、文档覆盖范围和后续建议。
 
 ## Superpowers 技能集成
 

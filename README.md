@@ -17,7 +17,7 @@ Repository source agent files are standardized as `*.md`, while Copilot-compatib
 | `project-director` | End-to-end orchestration from requirements through architecture, development, testing, final review, document audit, and main branch integration; handles remote release publishing on demand | `pd-requirement-analyst`, `pd-architect-task-planner`, `pd-developer`, `pd-qa-tester`, `pd-qa-gatekeeper`, plus `pd-check-repo-readiness` and `pd-audit-agent-doc` | Validated in practice |
 | `pl-coordinator` | Organizes learning workflows around existing projects: planning, scanning, deep dives, knowledge base distillation, retrospectives, and document auditing | `pl-resource-collector`, `pl-explorer`, `pl-support-engineer`, `pl-deep-diver`, `pl-tutor`, `pl-analyst`, plus auxiliary Skills | Design complete, pending further field validation |
 
-## Supported Platforms
+## Deployment Targets
 
 | Platform | Default Target Path | Environment Override | Deploy Command |
 |----------|--------------------|--------------------|----------------|
@@ -25,10 +25,12 @@ Repository source agent files are standardized as `*.md`, while Copilot-compatib
 | Claude Code | `~/.claude/aas-marketplace/plugins/agent-and-skill/` | `AAS_HOME` | `./sync.sh --target claude-code` |
 | OpenCode | `~/.opencode/` | `OPENCODE_HOME` | `./sync.sh --target opencode` |
 
+Copilot CLI is the only runtime target whose skill invocation and child-agent orchestration contract is fully specified in the shared AGENTS files today. Claude Code and OpenCode targets are supported for file sync and packaging, but still require target-native equivalents for `superpowers:*` and delegated child-workflow conventions before they should be treated as runtime-parity deployments.
+
 ## Latest Revision Highlights
 
 ### 1. Unified Multi-Platform Sync
-- `sync.sh` replaces `sync_to_copilot.sh` and now supports Copilot CLI, Claude Code, and OpenCode from one entry point.
+- `sync.sh` replaces `sync_to_copilot.sh` and can sync/package the repository layout for Copilot CLI, Claude Code, and OpenCode from one entry point.
 - Deployment can run repository validation via `--validate` or `--validate-only` before any sync.
 - Superpowers presence is checked before deployment, with platform-specific installation guidance.
 
@@ -112,6 +114,7 @@ COPILOT_HOME=/tmp/copilot-sandbox ./sync.sh --target copilot --dry-run
 - Source files use the platform-neutral `{{AAS_HOME}}` placeholder for all cross-file path references; `sync.sh` replaces it with the actual platform path during deployment.
 - Repository agent source files are stored as `*.md`; Copilot deployment can optionally rename them to `*.agent.md` with `--agent-suffix agent.md`.
 - For Claude Code deployments, automatically creates plugin manifests and syncs to the plugin cache directory.
+- Copilot CLI is the fully specified runtime target today; Claude Code and OpenCode currently reuse the same source tree as packaging targets, but still need target-native orchestration semantics before claiming full runtime parity.
 - The root `AGENTS.md` is NOT synced — it serves as the repository governance entry point, not a runtime artifact.
 
 ## Core Features

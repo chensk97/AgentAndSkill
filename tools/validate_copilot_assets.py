@@ -217,6 +217,18 @@ SKILL_TEMPLATE_PAIRS = [
     ("skills/pl-trace-flow/flow_template.md", "agents/pl-references/flow_template.md"),
 ]
 
+PL_NON_CANONICAL_PATHS = {
+    "LEARNING_PLAN.md": "LEARNINGS/LEARNING_PLAN.md",
+    "LEARNING_PROGRESS.md": "LEARNINGS/LEARNING_PROGRESS.md",
+    "PROJECT_MAP.md": "LEARNINGS/PROJECT_MAP.md",
+    "DEPENDENCY_MAP.md": "LEARNINGS/DEPENDENCY_MAP.md",
+    "LEARNING_PATH.md": "LEARNINGS/LEARNING_PATH.md",
+    "KNOWLEDGE_BASE/INDEX.md": "LEARNINGS/KNOWLEDGE_BASE/INDEX.md",
+    "RESOURCES/RESOURCE_LIBRARY.md": "LEARNINGS/RESOURCES/RESOURCE_LIBRARY.md",
+    "SUPPORT/SUPPORT_LOG.md": "LEARNINGS/SUPPORT/SUPPORT_LOG.md",
+    "REPORTS/LEARNING_REPORT.md": "LEARNINGS/REPORTS/LEARNING_REPORT.md",
+}
+
 
 def check_skill_template_consistency(errors: list[str]) -> None:
     for skill_path, canonical_path in SKILL_TEMPLATE_PAIRS:
@@ -232,6 +244,20 @@ def check_skill_template_consistency(errors: list[str]) -> None:
             fail(errors, f"Skill template diverged from canonical: {skill_path} != {canonical_path}")
 
 
+def check_pl_canonical_paths(errors: list[str]) -> None:
+    for markdown_path in iter_markdown_files():
+        if markdown_path.name == "CHANGELOG.md":
+            continue
+        text = load_text(markdown_path)
+        for non_canonical, canonical in PL_NON_CANONICAL_PATHS.items():
+            pattern = re.compile(rf"(?<!LEARNINGS/){re.escape(non_canonical)}")
+            if pattern.search(text):
+                fail(
+                    errors,
+                    f"Non-canonical PL path in {markdown_path.relative_to(REPO_ROOT)}: '{non_canonical}' should be '{canonical}'"
+                )
+
+
 def main() -> int:
     errors: list[str] = []
     check_required_files(errors)
@@ -240,6 +266,7 @@ def main() -> int:
     check_markdown_links(errors)
     check_versioned_docs(errors)
     check_skill_template_consistency(errors)
+    check_pl_canonical_paths(errors)
 
     if errors:
         print("Validation failed:")
@@ -250,7 +277,7 @@ def main() -> int:
     print("Validation passed:")
     print(f"- registry: {REGISTRY_PATH.relative_to(REPO_ROOT)}")
     print(f"- total index: {INDEX_PATH.relative_to(REPO_ROOT)}")
-    print("- shared AGENTS references, Superpowers sections, markdown links, skill template consistency, and required files are consistent")
+    print("- shared AGENTS references, Superpowers sections, markdown links, PL canonical paths, skill template consistency, and required files are consistent")
     return 0
 
 

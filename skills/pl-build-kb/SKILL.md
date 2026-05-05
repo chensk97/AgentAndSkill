@@ -24,7 +24,7 @@ description: "知识库汇总技能。汇总现有学习文档，建立索引、
 2. 建立文档索引、推荐阅读顺序和交叉引用
 3. 标注哪些模块已有全景、深度分析、链路分析、测试分析，哪些还缺失
 4. 按模板 [knowledge_base_template.md](./knowledge_base_template.md) 生成 `LEARNINGS/KNOWLEDGE_BASE/INDEX.md`
-5. 更新 `LEARNING_PROGRESS.md`
+5. 更新 `LEARNINGS/LEARNING_PROGRESS.md`
 
 ## 质量自检
 
@@ -35,7 +35,7 @@ description: "知识库汇总技能。汇总现有学习文档，建立索引、
 
 ## 输出格式
 
-返回完整的 `LEARNINGS/KNOWLEDGE_BASE/INDEX.md`，并在 `LEARNING_PROGRESS.md` 中记录汇总范围、缺失文档和建议下游角色 **pl-tutor**。
+返回完整的 `LEARNINGS/KNOWLEDGE_BASE/INDEX.md`，并在 `LEARNINGS/LEARNING_PROGRESS.md` 中记录汇总范围、缺失文档和建议下游角色 **pl-tutor**。
 
 ## Superpowers 技能集成
 

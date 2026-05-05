@@ -25,7 +25,7 @@ description: "数据流追踪技能。围绕一个函数、端点、模块或 HD
 3. 标注关键数据变换点、状态变更点和副作用位置
 4. 对 HDL 项目补充时钟域、复位、握手或状态机相关线索
 5. 按模板 [flow_template.md](./flow_template.md) 生成 `LEARNINGS/FLOWS/<topic>.md`
-6. 更新 `LEARNING_PROGRESS.md`
+6. 更新 `LEARNINGS/LEARNING_PROGRESS.md`
 
 ## 质量自检
 
@@ -36,7 +36,7 @@ description: "数据流追踪技能。围绕一个函数、端点、模块或 HD
 
 ## 输出格式
 
-返回完整的 `LEARNINGS/FLOWS/<topic>.md`，并在 `LEARNING_PROGRESS.md` 中记录分析入口、关键证据路径和建议后续角色 **pl-deep-diver**。
+返回完整的 `LEARNINGS/FLOWS/<topic>.md`，并在 `LEARNINGS/LEARNING_PROGRESS.md` 中记录分析入口、关键证据路径和建议后续角色 **pl-deep-diver**。
 
 ## Superpowers 技能集成
 

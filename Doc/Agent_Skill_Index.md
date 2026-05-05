@@ -44,7 +44,7 @@
 
 | 名称 | 类型 | 适用场景 | 主要输出 | 主要下游 |
 |------|------|----------|----------|----------|
-| `pl-coordinator` | 总控 | 围绕现有项目组织完整学习流程 | `LEARNING_PLAN.md`、`LEARNINGS/INDEX.md`、`LEARNINGS/Pending_User_Actions.md` | 全体 PL Agent / Skill |
+| `pl-coordinator` | 总控 | 围绕现有项目组织完整学习流程 | `LEARNINGS/LEARNING_PLAN.md`、`LEARNINGS/INDEX.md`、`LEARNINGS/Pending_User_Actions.md` | 全体 PL Agent / Skill |
 | `pl-resource-collector` | 专项 | 建资源库 | `LEARNINGS/RESOURCES/RESOURCE_LIBRARY.md` | `pl-explorer`、`pl-tutor`、`pl-analyst` |
 | `pl-explorer` | 专项 | 建立项目全景认知 | `LEARNINGS/PROJECT_MAP.md`、可选 `LEARNINGS/DEPENDENCY_MAP.md` | `pl-deep-diver`、`pl-tutor`、`pl-analyst` |
 | `pl-support-engineer` | 专项 | 排查环境与工具阻塞 | `LEARNINGS/SUPPORT/SUPPORT_LOG.md` | `pl-coordinator`、`pl-deep-diver`、`pl-tutor` |

@@ -21,7 +21,7 @@ argument-hint: "提供项目路径、当前技术问题描述和相关工具或�
 
 - 项目根目录
 - 当前技术问题描述、报错信息、复现步骤或性能症状
-- 可选：`LEARNING_PLAN.md`、`LEARNING_PROGRESS.md`
+- 可选：`LEARNINGS/LEARNING_PLAN.md`、`LEARNINGS/LEARNING_PROGRESS.md`
 - 可选：相关工具、运行环境、依赖版本和平台限制
 
 ## 工作流程
@@ -29,7 +29,7 @@ argument-hint: "提供项目路径、当前技术问题描述和相关工具或�
 ### 0. 共享初始化
 
 1. 按 [AGENTS.md]({{AAS_HOME}}/agents/pl-references/AGENTS.md) 完成断点恢复和启动记录
-2. 读取 `LEARNING_PROGRESS.md` 中最近的阻塞记录，确认问题背景和影响阶段
+2. 读取 `LEARNINGS/LEARNING_PROGRESS.md` 中最近的阻塞记录，确认问题背景和影响阶段
 
 ### 1. 问题受理与基线确认
 
@@ -58,11 +58,11 @@ argument-hint: "提供项目路径、当前技术问题描述和相关工具或�
 - [ ] 已给出修复方案或明确临时替代路径
 - [ ] 已记录工具或环境层面的注意事项
 - [ ] 复发风险和后续动作已说明
-- [ ] `LEARNING_PROGRESS.md` 已记录问题处置结果和输出路径
+- [ ] `LEARNINGS/LEARNING_PROGRESS.md` 已记录问题处置结果和输出路径
 
 ## 输出格式
 
-返回完整的 `LEARNINGS/SUPPORT/SUPPORT_LOG.md`，并在 `LEARNING_PROGRESS.md` 中记录问题类型、根因、修复状态和建议下游角色 **pl-coordinator** / **pl-deep-diver** / **pl-tutor**。
+返回完整的 `LEARNINGS/SUPPORT/SUPPORT_LOG.md`，并在 `LEARNINGS/LEARNING_PROGRESS.md` 中记录问题类型、根因、修复状态和建议下游角色 **pl-coordinator** / **pl-deep-diver** / **pl-tutor**。
 
 ## Superpowers 技能集成
 

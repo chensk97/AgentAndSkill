@@ -20,8 +20,8 @@ argument-hint: "提供项目路径或 LEARNINGS 目录路径，以及希望复�
 ## 输入
 
 - 项目根目录或 `LEARNINGS` 目录
-- 已有学习文档：`LEARNING_PLAN.md`、`LEARNING_PROGRESS.md`、`PROJECT_MAP.md`、`DEEP_DIVE/*.md`、`FLOWS/*.md`、`LEARNING_PATH.md`、`KNOWLEDGE_BASE/INDEX.md`
-- 可选：`RESOURCES/RESOURCE_LIBRARY.md`、`SUPPORT/SUPPORT_LOG.md`
+- 已有学习文档：`LEARNINGS/LEARNING_PLAN.md`、`LEARNINGS/LEARNING_PROGRESS.md`、`LEARNINGS/PROJECT_MAP.md`、`LEARNINGS/DEEP_DIVE/*.md`、`LEARNINGS/FLOWS/*.md`、`LEARNINGS/LEARNING_PATH.md`、`LEARNINGS/KNOWLEDGE_BASE/INDEX.md`
+- 可选：`LEARNINGS/RESOURCES/RESOURCE_LIBRARY.md`、`LEARNINGS/SUPPORT/SUPPORT_LOG.md`
 - 可选：用户反馈、学习时间投入、阶段完成情况
 
 ## 工作流程
@@ -29,7 +29,7 @@ argument-hint: "提供项目路径或 LEARNINGS 目录路径，以及希望复�
 ### 0. 共享初始化
 
 1. 按 [AGENTS.md]({{AAS_HOME}}/agents/pl-references/AGENTS.md) 完成断点恢复和启动记录
-2. 先读取 `LEARNING_PLAN.md` 和 `LEARNING_PROGRESS.md`，确认目标、阶段状态和实际执行轨迹
+2. 先读取 `LEARNINGS/LEARNING_PLAN.md` 和 `LEARNINGS/LEARNING_PROGRESS.md`，确认目标、阶段状态和实际执行轨迹
 
 ### 1. 学习数据汇总
 
@@ -59,11 +59,11 @@ argument-hint: "提供项目路径或 LEARNINGS 目录路径，以及希望复�
 - [ ] 已明确成功因素和改进点
 - [ ] 建议有证据支撑或已标注为推测
 - [ ] 报告包含可执行的下一步建议
-- [ ] `LEARNING_PROGRESS.md` 已记录复盘范围、关键结论和输出路径
+- [ ] `LEARNINGS/LEARNING_PROGRESS.md` 已记录复盘范围、关键结论和输出路径
 
 ## 输出格式
 
-返回完整的 `LEARNINGS/REPORTS/LEARNING_REPORT.md`，并在 `LEARNING_PROGRESS.md` 中记录复盘范围、关键发现、优化建议和建议下游角色 **pl-coordinator** / **pl-tutor**。
+返回完整的 `LEARNINGS/REPORTS/LEARNING_REPORT.md`，并在 `LEARNINGS/LEARNING_PROGRESS.md` 中记录复盘范围、关键发现、优化建议和建议下游角色 **pl-coordinator** / **pl-tutor**。
 
 ## Superpowers 技能集成
 

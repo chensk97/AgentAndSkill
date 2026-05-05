@@ -19,7 +19,7 @@
 | `project-director` | 从原始需求一路推进到架构、开发、测试、终审、文档审计、主干集成，并按需负责远端 release 发布 | `pd-requirement-analyst`、`pd-architect-task-planner`、`pd-developer`、`pd-qa-tester`、`pd-qa-gatekeeper`，以及 `pd-check-repo-readiness`、`pd-audit-agent-doc` | 已实际使用 |
 | `pl-coordinator` | 围绕一个现有项目做学习规划、项目扫描、深挖、知识库沉淀、复盘和文档审计 | `pl-resource-collector`、`pl-explorer`、`pl-support-engineer`、`pl-deep-diver`、`pl-tutor`、`pl-analyst`，以及若干辅助 Skill | 设计已成型，待更多实战验证 |
 
-## 支持的平台
+## 部署目标
 
 | 平台 | 默认目标路径 | 环境变量覆盖 | 部署命令 |
 |------|-------------|-------------|----------|
@@ -27,10 +27,12 @@
 | Claude Code | `~/.claude/aas-marketplace/plugins/agent-and-skill/` | `AAS_HOME` | `./sync.sh --target claude-code` |
 | OpenCode | `~/.opencode/` | `OPENCODE_HOME` | `./sync.sh --target opencode` |
 
+当前只有 Copilot CLI 的 Skill 调用方式和子代理编排契约在共享 AGENTS 中被完整定义。Claude Code 和 OpenCode 目标目前支持文件同步与打包，但在补齐 `superpowers:*` 和子工作流的目标平台等价约定之前，不应被视为与 Copilot CLI 完全等价的运行时部署。
+
 ## 最新修订重点
 
 ### 1. 统一多平台同步入口
-- `sync.sh` 已替代 `sync_to_copilot.sh`，统一支持 Copilot CLI、Claude Code 和 OpenCode。
+- `sync.sh` 已替代 `sync_to_copilot.sh`，可以从同一个入口同步/打包 Copilot CLI、Claude Code 和 OpenCode 所需的仓库布局。
 - 部署前可通过 `--validate` 或 `--validate-only` 先执行仓库一致性校验。
 - 同步前会检查 Superpowers 是否存在，并给出各平台对应的安装提示。
 
@@ -114,6 +116,7 @@ COPILOT_HOME=/tmp/copilot-sandbox ./sync.sh --target copilot --dry-run
 - 源文件中所有跨文件路径引用使用平台无关的 `{{AAS_HOME}}` 占位符；`sync.sh` 部署时自动替换为目标平台的实际路径。
 - 仓库中的 Agent 源文件统一以 `*.md` 存放；如果是 Copilot 目标，可通过 `--agent-suffix agent.md` 输出 `*.agent.md`。
 - 部署到 Claude Code 时，自动创建插件清单并同步到插件缓存目录。
+- 当前只有 Copilot CLI 被完整定义为运行时目标；Claude Code 与 OpenCode 目前复用同一份源内容做打包同步，若要宣称运行时等价，还需补齐目标平台原生的编排与 Skill 调用约定。
 - 根目录 `AGENTS.md` 不在同步范围内——它是仓库维护治理入口，不是运行时同步产物。
 
 ## 核心特性

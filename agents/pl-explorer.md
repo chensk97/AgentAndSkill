@@ -22,7 +22,7 @@ argument-hint: "提供项目路径或 Git 仓库 URL"
 - 项目目录路径，或 Git 仓库 URL
 - 可选：用户指定的关注范围（如后端、仿真目录、某个子模块）
 - 可选：`LEARNINGS/RESOURCES/RESOURCE_LIBRARY.md`
-- 可选：共享上下文（项目根目录、`LEARNINGS` 路径、`LEARNING_PROGRESS.md` 路径）
+- 可选：共享上下文（项目根目录、`LEARNINGS` 路径、`LEARNINGS/LEARNING_PROGRESS.md` 路径）
 
 ## 工作流程
 
@@ -72,7 +72,7 @@ argument-hint: "提供项目路径或 Git 仓库 URL"
 - [ ] 已列出主要入口或明确说明未识别原因
 - [ ] 已标注技术栈与关键配置文件
 - [ ] 已区分“已确认”和“待确认”内容
-- [ ] `LEARNING_PROGRESS.md` 已记录启动、扫描完成和输出完成
+- [ ] `LEARNINGS/LEARNING_PROGRESS.md` 已记录启动、扫描完成和输出完成
 
 ## 输出格式
 

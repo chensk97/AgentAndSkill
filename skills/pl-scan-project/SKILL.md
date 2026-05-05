@@ -25,7 +25,7 @@ description: "项目扫描技能。扫描项目目录、识别技术栈、入口
 3. 识别语言、构建配置、运行脚本、仿真脚本、顶层模块和 testbench
 4. 提炼项目类型、核心模块、候选入口、常见运行命令
 5. 按模板 [project_map_template.md](./project_map_template.md) 生成 `LEARNINGS/PROJECT_MAP.md`
-6. 更新 `LEARNING_PROGRESS.md`
+6. 更新 `LEARNINGS/LEARNING_PROGRESS.md`
 
 ## 质量自检
 
@@ -36,7 +36,7 @@ description: "项目扫描技能。扫描项目目录、识别技术栈、入口
 
 ## 输出格式
 
-返回完整的 `LEARNINGS/PROJECT_MAP.md`，并在 `LEARNING_PROGRESS.md` 中记录扫描范围、忽略规则、输出路径和建议后续技能 **pl-analyze-deps**。
+返回完整的 `LEARNINGS/PROJECT_MAP.md`，并在 `LEARNINGS/LEARNING_PROGRESS.md` 中记录扫描范围、忽略规则、输出路径和建议后续技能 **pl-analyze-deps**。
 
 ## Superpowers 技能集成
 

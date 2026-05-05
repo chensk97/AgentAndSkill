@@ -17,7 +17,7 @@ description: "逆向测试技能。通过梳理模块公开接口和关键行为
 
 - 项目根目录
 - 模块名、文件路径或公共接口名
-- 可选：已有 `DEEP_DIVE` 或 `FLOW` 文档
+- 可选：已有 `LEARNINGS/DEEP_DIVE/*` 或 `LEARNINGS/FLOWS/*` 文档
 
 ## 工作流程
 
@@ -30,7 +30,7 @@ description: "逆向测试技能。通过梳理模块公开接口和关键行为
    - 若有安全边界则补充攻击性输入
 4. 生成测试文件草案到 `LEARNINGS/TESTS/test_<module>.*`
 5. 按模板 [test_analysis_template.md](./test_analysis_template.md) 生成 `LEARNINGS/TESTS/TEST_ANALYSIS_<module>.md`
-6. 更新 `LEARNING_PROGRESS.md`
+6. 更新 `LEARNINGS/LEARNING_PROGRESS.md`
 
 ## 质量自检
 
@@ -41,7 +41,7 @@ description: "逆向测试技能。通过梳理模块公开接口和关键行为
 
 ## 输出格式
 
-返回测试草案文件和 `LEARNINGS/TESTS/TEST_ANALYSIS_<module>.md`，并在 `LEARNING_PROGRESS.md` 中记录测试目标、覆盖维度和仍待人工补充的断言。
+返回测试草案文件和 `LEARNINGS/TESTS/TEST_ANALYSIS_<module>.md`，并在 `LEARNINGS/LEARNING_PROGRESS.md` 中记录测试目标、覆盖维度和仍待人工补充的断言。
 
 ## Superpowers 技能集成
 

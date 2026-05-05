@@ -55,7 +55,7 @@
 6. `pl-tutor` 在已有地图、深挖结果和资源库基础上组织学习路径，并汇总知识库；必要时联动 `pl-build-kb`。
 7. `pl-analyst` 对本轮学习过程、产物和效果做复盘分析。
 8. `pl-coordinator` 执行阶段 5.5 的文档审计：归档历史版本、修复链接、生成 `LEARNINGS/INDEX.md`，并确认 `LEARNINGS/Pending_User_Actions.md` 存在。
-9. `pl-coordinator` 根据分析结果闭环，更新 `LEARNING_PROGRESS.md`；如果学习流程涉及 Git 推送，收尾时本地仍需切回 `main` 并保持 clean。
+9. `pl-coordinator` 根据分析结果闭环，更新 `LEARNINGS/LEARNING_PROGRESS.md`；如果学习流程涉及 Git 推送，收尾时本地仍需切回 `main` 并保持 clean。
 
 如果只是想解决某个局部问题，可以从专项入口直接进入，不必走完整顺序。
 
@@ -65,13 +65,13 @@
 
 | 角色 | 主要职责 | 不负责什么 | 典型输出 |
 |------|----------|------------|----------|
-| `pl-coordinator` | 制定学习计划、协调阶段推进、分发上下文、跟踪阻塞、默认自主推进、维护 `LEARNINGS` 归档 / 索引 / `Pending_User_Actions` | 不替代其他角色做具体扫描、深挖或复盘 | `LEARNING_PLAN.md`、`LEARNINGS/INDEX.md`、进度推进与阶段决策 |
-| `pl-resource-collector` | 搜集、筛选、分类和维护学习资源 | 不做项目源码分析本身 | `RESOURCE_LIBRARY.md` |
-| `pl-explorer` | 扫描项目结构、技术栈、入口和核心模块 | 不做模块级深入解读 | `PROJECT_MAP.md` |
-| `pl-support-engineer` | 处理环境、依赖、脚本、工具和平台问题 | 不直接代替其他角色完成学习分析 | `SUPPORT_LOG.md` |
-| `pl-deep-diver` | 对指定模块、接口或链路做深度分析 | 不做全仓库概览 | `DEEP_DIVE/*`、`FLOWS/*` |
-| `pl-tutor` | 基于既有文档编排学习顺序、生成知识库入口 | 不凭空生成未分析的内容 | `LEARNING_PATH.md`、`KNOWLEDGE_BASE/INDEX.md` |
-| `pl-analyst` | 评估学习效果、总结成功模式、提出改进建议 | 不负责一线探索或技术排障 | `REPORTS/LEARNING_REPORT.md` |
+| `pl-coordinator` | 制定学习计划、协调阶段推进、分发上下文、跟踪阻塞、默认自主推进、维护 `LEARNINGS` 归档 / 索引 / `Pending_User_Actions` | 不替代其他角色做具体扫描、深挖或复盘 | `LEARNINGS/LEARNING_PLAN.md`、`LEARNINGS/INDEX.md`、进度推进与阶段决策 |
+| `pl-resource-collector` | 搜集、筛选、分类和维护学习资源 | 不做项目源码分析本身 | `LEARNINGS/RESOURCES/RESOURCE_LIBRARY.md` |
+| `pl-explorer` | 扫描项目结构、技术栈、入口和核心模块 | 不做模块级深入解读 | `LEARNINGS/PROJECT_MAP.md` |
+| `pl-support-engineer` | 处理环境、依赖、脚本、工具和平台问题 | 不直接代替其他角色完成学习分析 | `LEARNINGS/SUPPORT/SUPPORT_LOG.md` |
+| `pl-deep-diver` | 对指定模块、接口或链路做深度分析 | 不做全仓库概览 | `LEARNINGS/DEEP_DIVE/*`、`LEARNINGS/FLOWS/*` |
+| `pl-tutor` | 基于既有文档编排学习顺序、生成知识库入口 | 不凭空生成未分析的内容 | `LEARNINGS/LEARNING_PATH.md`、`LEARNINGS/KNOWLEDGE_BASE/INDEX.md` |
+| `pl-analyst` | 评估学习效果、总结成功模式、提出改进建议 | 不负责一线探索或技术排障 | `LEARNINGS/REPORTS/LEARNING_REPORT.md` |
 
 ### Skill 分工
 
@@ -95,14 +95,14 @@
 
 | 上游角色/技能 | 交接产物 | 下游角色/技能 | 说明 |
 |----------------|----------|----------------|------|
-| `pl-coordinator` | 学习目标、计划、`LEARNING_PROGRESS.md`、阶段上下文 | 全体 Agent / Skill | 所有后续角色共用的调度基线 |
+| `pl-coordinator` | 学习目标、计划、`LEARNINGS/LEARNING_PROGRESS.md`、阶段上下文 | 全体 Agent / Skill | 所有后续角色共用的调度基线 |
 | `pl-resource-collector` | `LEARNINGS/RESOURCES/RESOURCE_LIBRARY.md` | `pl-explorer`、`pl-tutor`、`pl-analyst` | 给探索、学习引导和复盘提供资料底座 |
 | `pl-explorer` | `LEARNINGS/PROJECT_MAP.md`、可选 `LEARNINGS/DEPENDENCY_MAP.md` | `pl-deep-diver`、`pl-tutor`、`pl-analyst` | 为深挖和学习组织提供全局地图 |
 | `pl-support-engineer` | `LEARNINGS/SUPPORT/SUPPORT_LOG.md` | `pl-coordinator`、`pl-deep-diver`、`pl-tutor` | 把环境与工具问题处理结果回传给分析和学习环节 |
 | `pl-deep-diver` | `LEARNINGS/DEEP_DIVE/*`、`LEARNINGS/FLOWS/*`、可选测试分析 | `pl-tutor`、`pl-analyst` | 深挖产物为学习路径和复盘提供核心证据 |
 | `pl-tutor` | `LEARNINGS/LEARNING_PATH.md`、`LEARNINGS/KNOWLEDGE_BASE/INDEX.md` | `pl-analyst`、`pl-coordinator` | 供复盘分析和下一轮计划使用 |
 | `pl-analyst` | `LEARNINGS/REPORTS/LEARNING_REPORT.md` | `pl-coordinator`、`pl-tutor` | 为闭环优化和下一轮学习提供依据 |
-| `pl-coordinator` | `LEARNINGS/INDEX.md`、`LEARNINGS/Pending_User_Actions.md`、更新后的 `LEARNING_PROGRESS.md` | 用户 / 下一轮迭代 | 作为本轮学习索引、遗留事项清单和下次恢复入口 |
+| `pl-coordinator` | `LEARNINGS/INDEX.md`、`LEARNINGS/Pending_User_Actions.md`、更新后的 `LEARNINGS/LEARNING_PROGRESS.md` | 用户 / 下一轮迭代 | 作为本轮学习索引、遗留事项清单和下次恢复入口 |
 | `pl-scan-project` / `pl-analyze-deps` | 项目地图 / 依赖分析 | `pl-explorer`、`pl-tutor` | 通常是全景扫描的辅助技能 |
 | `pl-trace-flow` / `pl-gen-tests` | 链路分析 / 测试分析 | `pl-deep-diver`、`pl-tutor` | 通常是深挖阶段的辅助技能 |
 | `pl-build-kb` | 知识库索引 | `pl-tutor` | 通常是知识沉淀阶段的辅助技能 |

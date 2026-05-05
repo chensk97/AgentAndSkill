@@ -127,6 +127,9 @@ Most projects in this workspace go through multiple rounds of supplementary requ
 
 ## Superpowers Skill Integration (shared)
 
+- This repository can be synced to multiple target directories, but the runtime skill and delegation contract defined below is fully specified only for Copilot CLI today.
+- If these files are packaged to Claude Code or OpenCode, treat them as source-compatible artifacts unless the target platform also has an explicit, equivalent contract for `superpowers:*`, delegated child workflows, and completion validation. Path sync alone does not establish runtime parity.
+
 This Agent suite runs on Copilot CLI alongside the `superpowers` plugin (installed as a Copilot CLI plugin, NOT a sibling folder of this repo). When a superpowers skill applies, agents MUST invoke the corresponding skill explicitly via the Copilot CLI `skill` tool — for example `skill superpowers:test-driven-development` — and announce the use as required by the `superpowers:using-superpowers` skill.
 
 > ⚠️ Do NOT reference superpowers skills via filesystem paths (e.g. `../../superpowers/skills/...`). The superpowers plugin is loaded by Copilot CLI by namespace `superpowers:<skill-name>`; always invoke skills by that identifier.

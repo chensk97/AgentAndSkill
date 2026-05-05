@@ -35,6 +35,10 @@
 - 补齐根目录 `.gitignore`，满足 `tools/validate_copilot_assets.py` 的必需文件约束，并忽略常见本地缓存文件。
 - 同步补齐 `README.md` 与 `README_zh.md` 对最新治理入口、命名迁移、总索引与校验能力的说明。
 - 修正 `Doc/Agent_Skill_Index.md` 中同步前校验命令，补回必需的 `--target` 参数。
+- 修正 `sync.sh` 在 macOS 上的占位符替换失败问题，改为可移植实现，并将 `{{AAS_HOME}}` 替换为实际目标绝对路径。
+- 收紧 `sync.sh` 的 Superpowers 检测逻辑，避免把普通 Skill 文档中的 `superpowers` 文本误判为插件已安装。
+- 明确 README 与共享 AGENTS 的平台边界：Copilot CLI 是当前完整定义的运行时目标，Claude Code / OpenCode 仍属于同步与打包目标。
+- 统一 PL 体系对 `LEARNINGS/*` canonical 路径的写法，并为 `tools/validate_copilot_assets.py` 增加路径漂移检查。
 
 ### Removed
 

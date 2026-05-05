@@ -104,24 +104,21 @@ run_validation() {
 
 check_superpowers_copilot() {
   local home_dir="$1"
-  if find "$home_dir" -maxdepth 4 -type f -name "SKILL.md" 2>/dev/null \
-      | xargs grep -l "superpowers" 2>/dev/null | grep -q .; then
-    return 0
+  if command -v copilot >/dev/null 2>&1; then
+    if copilot plugin list 2>/dev/null | grep -iq "superpowers"; then
+      return 0
+    fi
   fi
-  if find "$home_dir" -maxdepth 3 -type d -name "superpowers" 2>/dev/null | grep -q .; then
+  if find "$home_dir" -maxdepth 5 -type d -path "*/plugins/*" \( -name "superpowers" -o -name "*superpowers*" \) 2>/dev/null | grep -q .; then
     return 0
   fi
   return 1
 }
 
 check_superpowers_claude_code() {
-  local home_dir="$1"
   local claude_root="${HOME}/.claude"
-  if find "$claude_root" -maxdepth 5 -type f -name "SKILL.md" 2>/dev/null \
-      | xargs grep -l "superpowers" 2>/dev/null | grep -q .; then
-    return 0
-  fi
-  if find "$claude_root" -maxdepth 4 -type d -name "superpowers" 2>/dev/null | grep -q .; then
+  if find "$claude_root/plugins" "$claude_root/aas-marketplace" "$claude_root/.plugins" \
+      -maxdepth 6 -type d \( -name "superpowers" -o -name "*superpowers*" \) 2>/dev/null | grep -q .; then
     return 0
   fi
   return 1
@@ -129,11 +126,10 @@ check_superpowers_claude_code() {
 
 check_superpowers_opencode() {
   local home_dir="$1"
-  if find "$home_dir" -maxdepth 4 -type f -name "SKILL.md" 2>/dev/null \
-      | xargs grep -l "superpowers" 2>/dev/null | grep -q .; then
+  if [[ -d "$home_dir/plugins/superpowers" ]]; then
     return 0
   fi
-  if find "$home_dir" -maxdepth 3 -type d -name "superpowers" 2>/dev/null | grep -q .; then
+  if find "$home_dir" -maxdepth 5 -type d -path "*/plugins/*" \( -name "superpowers" -o -name "*superpowers*" \) 2>/dev/null | grep -q .; then
     return 0
   fi
   return 1
@@ -466,19 +462,51 @@ rename_agent_files_for_copilot() {
   fi
 }
 
-postprocess() {
-  local home_dir="$1"
+escape_sed_replacement() {
+  printf '%s' "$1" | sed -e 's/[&|\\]/\\&/g'
+}
+
+replace_placeholder_in_file() {
+  local file_path="$1"
   local replacement="$2"
+  local temp_file
+
+  temp_file="$(mktemp "${TMPDIR:-/tmp}/agent-and-skill.XXXXXX")"
+  sed "s|{{AAS_HOME}}|${replacement}|g" "$file_path" > "$temp_file"
+  mv -- "$temp_file" "$file_path"
+}
+
+postprocess() {
+  local replacement="$1"
+  shift
+  local target_dirs=("$@")
+  local replacement_escaped
+  local found_files=0
 
   if [[ "$DRY_RUN" -eq 1 ]]; then
     printf '[post-sync] dry-run: would replace {{AAS_HOME}} -> %s\n' "$replacement"
     return 0
   fi
 
-  find "$home_dir" -name "*.md" -exec sed -i \
-    "s|{{AAS_HOME}}|${replacement}|g" {} +
+  replacement_escaped="$(escape_sed_replacement "$replacement")"
 
-  if grep -rq "{{AAS_HOME}}" "$home_dir/" 2>/dev/null; then
+  for target_dir in "${target_dirs[@]}"; do
+    if [[ ! -d "$target_dir" ]]; then
+      continue
+    fi
+
+    while IFS= read -r -d '' file_path; do
+      replace_placeholder_in_file "$file_path" "$replacement_escaped"
+      found_files=1
+    done < <(find "$target_dir" -type f -name "*.md" -print0)
+  done
+
+  if [[ "$found_files" -eq 0 ]]; then
+    printf '[post-sync] no markdown files found for placeholder replacement.\n'
+    return 0
+  fi
+
+  if grep -rq "{{AAS_HOME}}" "${target_dirs[@]}" 2>/dev/null; then
     printf '[post-sync] WARNING: unresolved {{AAS_HOME}} placeholders found!\n' >&2
   fi
 
@@ -552,7 +580,6 @@ case "$TARGET" in
     TARGET_HOME="$COPILOT_HOME"
     TARGET_LABEL="Copilot"
     TARGET_KEY="copilot"
-    AAS_PATH="~/.copilot"
     ;;
   claude-code)
     TARGET_AGENTS_DIR="${CC_HOME}/agents"
@@ -560,7 +587,6 @@ case "$TARGET" in
     TARGET_HOME="$CC_HOME"
     TARGET_LABEL="Claude Code"
     TARGET_KEY="claude-code"
-    AAS_PATH="$CC_HOME"
     MARKETPLACE_ROOT="$(cd -- "$(dirname -- "$(dirname -- "$CC_HOME")")" 2>/dev/null && pwd)" || true
     if [[ -z "$MARKETPLACE_ROOT" ]]; then
       MARKETPLACE_ROOT="$(dirname "$(dirname "$CC_HOME")")"
@@ -573,7 +599,6 @@ case "$TARGET" in
     TARGET_HOME="$OPENCODE_HOME"
     TARGET_LABEL="OpenCode"
     TARGET_KEY="opencode"
-    AAS_PATH="~/.opencode"
     ;;
   "")
     printf 'Error: --target is required. Use copilot, claude-code, or opencode.\n\n' >&2
@@ -632,6 +657,9 @@ ensure_superpowers "$TARGET_KEY" "$TARGET_HOME"
 
 if [[ "$DRY_RUN" -ne 1 ]]; then
   mkdir -p "$TARGET_HOME"
+  TARGET_HOME="$(cd -- "$TARGET_HOME" && pwd)"
+  TARGET_AGENTS_DIR="${TARGET_HOME}/agents"
+  TARGET_SKILLS_DIR="${TARGET_HOME}/skills"
 fi
 
 sync_dir "agents" "$SOURCE_AGENTS_DIR" "$TARGET_AGENTS_DIR" "$TARGET_HOME"
@@ -649,7 +677,7 @@ if [[ "$TARGET_KEY" == "copilot" && "$AGENT_SUFFIX" == "agent.md" ]]; then
 fi
 
 if [[ "$DRY_RUN" -ne 1 ]]; then
-  postprocess "$TARGET_HOME" "$AAS_PATH"
+  postprocess "$TARGET_HOME" "$TARGET_AGENTS_DIR" "$TARGET_SKILLS_DIR"
 fi
 
 # Sync to Claude Code plugin cache so agents/skills are discoverable at runtime.

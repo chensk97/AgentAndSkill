@@ -23,14 +23,14 @@ argument-hint: "提供项目路径，以及目标模块名、文件名、函数�
 - 目标模块名、函数名、文件路径、API 端点或 HDL 顶层名
 - 可选：已有 `LEARNINGS/PROJECT_MAP.md`、`LEARNINGS/DEPENDENCY_MAP.md`
 - 可选：`LEARNINGS/RESOURCES/RESOURCE_LIBRARY.md`、`LEARNINGS/SUPPORT/SUPPORT_LOG.md`
-- 可选：共享上下文（`LEARNINGS` 路径、`LEARNING_PROGRESS.md` 路径）
+- 可选：共享上下文（`LEARNINGS` 路径、`LEARNINGS/LEARNING_PROGRESS.md` 路径）
 
 ## 工作流程
 
 ### 0. 共享初始化
 
 1. 按 [AGENTS.md]({{AAS_HOME}}/agents/pl-references/AGENTS.md) 完成断点恢复和启动记录
-2. 若已有 `PROJECT_MAP.md`，先读取相关模块上下文
+2. 若已有 `LEARNINGS/PROJECT_MAP.md`，先读取相关模块上下文
 
 ### 1. 模块定位
 
@@ -66,11 +66,11 @@ argument-hint: "提供项目路径，以及目标模块名、文件名、函数�
 - [ ] 已列出关键调用链或信号流线索
 - [ ] 不确定部分已显式标注
 - [ ] 对复杂逻辑给出了“建议如何继续读”的路径
-- [ ] `LEARNING_PROGRESS.md` 已记录分析范围、证据位置和输出结果
+- [ ] `LEARNINGS/LEARNING_PROGRESS.md` 已记录分析范围、证据位置和输出结果
 
 ## 输出格式
 
-返回完整的 `LEARNINGS/DEEP_DIVE/<module>.md`，必要时补充 `LEARNINGS/FLOWS/<topic>.md` 和 `LEARNINGS/TESTS/TEST_ANALYSIS_<module>.md`。完成后更新 `LEARNING_PROGRESS.md`，记录输出路径、仍待验证的问题和建议下游角色 **pl-tutor** / **pl-analyst**。
+返回完整的 `LEARNINGS/DEEP_DIVE/<module>.md`，必要时补充 `LEARNINGS/FLOWS/<topic>.md` 和 `LEARNINGS/TESTS/TEST_ANALYSIS_<module>.md`。完成后更新 `LEARNINGS/LEARNING_PROGRESS.md`，记录输出路径、仍待验证的问题和建议下游角色 **pl-tutor** / **pl-analyst**。
 
 ## Superpowers 技能集成
 

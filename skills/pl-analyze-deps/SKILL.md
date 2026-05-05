@@ -16,7 +16,7 @@ description: "依赖分析技能。解析依赖清单、区分运行时与开发
 ## 输入
 
 - 项目根目录
-- 可选：已有 `PROJECT_MAP.md`
+- 可选：已有 `LEARNINGS/PROJECT_MAP.md`
 
 ## 工作流程
 
@@ -28,7 +28,7 @@ description: "依赖分析技能。解析依赖清单、区分运行时与开发
 3. 标注版本范围、浮动版本、来源不明依赖等风险信号
 4. 用源码引用补充“关键依赖用途”
 5. 按模板 [dependency_map_template.md](./dependency_map_template.md) 生成 `LEARNINGS/DEPENDENCY_MAP.md`
-6. 更新 `LEARNING_PROGRESS.md`
+6. 更新 `LEARNINGS/LEARNING_PROGRESS.md`
 
 ## 质量自检
 
@@ -39,7 +39,7 @@ description: "依赖分析技能。解析依赖清单、区分运行时与开发
 
 ## 输出格式
 
-返回完整的 `LEARNINGS/DEPENDENCY_MAP.md`，并在 `LEARNING_PROGRESS.md` 中记录解析的清单文件、发现的关键风险和建议后续角色 **pl-explorer** / **pl-tutor**。
+返回完整的 `LEARNINGS/DEPENDENCY_MAP.md`，并在 `LEARNINGS/LEARNING_PROGRESS.md` 中记录解析的清单文件、发现的关键风险和建议后续角色 **pl-explorer** / **pl-tutor**。
 
 ## Superpowers 技能集成
 

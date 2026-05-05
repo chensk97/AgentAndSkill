@@ -21,7 +21,7 @@ argument-hint: "提供项目路径、学习目标和需要重点收集的资源�
 
 - 项目根目录或相关仓库地址
 - 学习目标、关注模块、目标语言/框架
-- 可选：已有 `LEARNING_PLAN.md`、`PROJECT_MAP.md`
+- 可选：已有 `LEARNINGS/LEARNING_PLAN.md`、`LEARNINGS/PROJECT_MAP.md`
 - 可选：用户指定的资源类型，例如文献、官方文档、工具、示例仓库、数据集
 
 ## 工作流程
@@ -29,7 +29,7 @@ argument-hint: "提供项目路径、学习目标和需要重点收集的资源�
 ### 0. 共享初始化
 
 1. 按 [AGENTS.md]({{AAS_HOME}}/agents/pl-references/AGENTS.md) 完成断点恢复和启动记录
-2. 若已有 `LEARNING_PLAN.md` 或 `PROJECT_MAP.md`，先读取目标范围和上下文
+2. 若已有 `LEARNINGS/LEARNING_PLAN.md` 或 `LEARNINGS/PROJECT_MAP.md`，先读取目标范围和上下文
 
 ### 1. 资源需求拆解
 
@@ -58,11 +58,11 @@ argument-hint: "提供项目路径、学习目标和需要重点收集的资源�
 - [ ] 已说明关键资源的价值和适用场景
 - [ ] 已剔除明显重复或低价值资源
 - [ ] 待验证资源已明确标注
-- [ ] `LEARNING_PROGRESS.md` 已记录资源范围、筛选标准和输出路径
+- [ ] `LEARNINGS/LEARNING_PROGRESS.md` 已记录资源范围、筛选标准和输出路径
 
 ## 输出格式
 
-返回完整的 `LEARNINGS/RESOURCES/RESOURCE_LIBRARY.md`，并在 `LEARNING_PROGRESS.md` 中记录资源类型、筛选标准、关键资源和建议下游角色 **pl-explorer** / **pl-tutor** / **pl-analyst**。
+返回完整的 `LEARNINGS/RESOURCES/RESOURCE_LIBRARY.md`，并在 `LEARNINGS/LEARNING_PROGRESS.md` 中记录资源类型、筛选标准、关键资源和建议下游角色 **pl-explorer** / **pl-tutor** / **pl-analyst**。
 
 ## Superpowers 技能集成
 
