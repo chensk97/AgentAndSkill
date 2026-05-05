@@ -20,8 +20,8 @@
 |------------|----------|----------|
 | [agents/pd-requirement-analyst.md](../agents/pd-requirement-analyst.md) | 只有原始需求，需要先整理成 PRD | `Agent_doc/PRD.md` |
 | [agents/pd-architect-task-planner.md](../agents/pd-architect-task-planner.md) | 已有 PRD，需要产出架构和任务拆解 | `Agent_doc/System_Architecture_and_Task_Breakdown.md` |
-| [agents/pd-developer.md](../agents/pd-developer.md) | 已有任务和架构，需要进入编码实现 | 代码、测试、模块说明 |
-| [agents/pd-qa-tester.md](../agents/pd-qa-tester.md) | 需要设计测试用例、执行黑盒验证或补测 | 测试用例、测试报告 |
+| [agents/pd-developer.md](../agents/pd-developer.md) | 已有任务和架构，需要进入编码实现 | 代码、测试、`Agent_doc/pd-developer-doc/README_<模块名>.md` |
+| [agents/pd-qa-tester.md](../agents/pd-qa-tester.md) | 需要设计测试用例、执行黑盒验证或补测 | `Agent_doc/pd-qa-tester-doc/Test_Cases_<任务标识>.md`、`Agent_doc/pd-qa-tester-doc/Test_Report_<任务标识>.md` |
 | [agents/pd-qa-gatekeeper.md](../agents/pd-qa-gatekeeper.md) | 所有交付物基本齐备，需要做终审裁决或审计 release 合规性 | `Agent_doc/Quality_Check_Report.md` |
 
 ### 共享规则入口
@@ -53,14 +53,16 @@
 | `project-director` | 统筹全流程、默认自主推进、维护 `Agent_doc` 归档 / 索引 / `Pending_User_Actions`、主干集成与按需 release 发布 | 不直接写 PRD、架构、业务代码或测试报告 | 进度推进、阶段决策、`Agent_doc/INDEX.md`、归档与合入说明 |
 | `pd-requirement-analyst` | 解析原始需求、补齐隐性需求、生成 PRD | 不做技术设计和编码 | `Agent_doc/PRD.md` |
 | `pd-architect-task-planner` | 设计系统架构、模块边界、任务拆解和依赖关系 | 不写业务代码、不执行测试 | `Agent_doc/System_Architecture_and_Task_Breakdown.md` |
-| `pd-developer` | 实现代码、补齐单元测试、编写模块说明 | 不修改 PRD 或架构文档，不直接写 `main` / `release` | 代码、测试、`README_<模块名>.md` |
-| `pd-qa-tester` | 设计测试用例、执行黑盒验证、做代码审查视角的检查 | 不直接改产品代码，不直接写 `main` / `release` | `Test_Cases_*.md`、`Test_Report_*.md` |
+| `pd-developer` | 实现代码、补齐单元测试、编写模块说明 | 不修改 PRD 或架构文档，不直接写 `main` / `release` | 代码、测试、`Agent_doc/pd-developer-doc/README_<模块名>.md` |
+| `pd-qa-tester` | 设计测试用例、执行黑盒验证、做代码审查视角的检查 | 不直接改产品代码，不直接写 `main` / `release` | `Agent_doc/pd-qa-tester-doc/Test_Cases_<任务标识>.md`、`Agent_doc/pd-qa-tester-doc/Test_Report_<任务标识>.md` |
 | `pd-qa-gatekeeper` | 终审所有交付物、检查一致性、审计 release 流程是否合规 | 不负责开发、合并或提交任何分支 | `Agent_doc/Quality_Check_Report.md` |
 
 ## 4. 当前修订后的关键约束
 
 - 共享 framework 文件和模板在运行时只能从 `{{AAS_HOME}}/agents/pd-references/` 读取，不能再依赖仓库内的相对路径。
 - 默认运行模式要求 `project-director` 从阶段 0 连续推进到阶段 7；中间可决策项由总控自行决定并写入 `Agent_doc/Agent_Progress_Log.md`。
+- `project-director` 每次委派任何 `pd-*` Agent 或复用 Skill 时，都必须在子调用中显式带入三组共享硬约束：大文件分块处理、`model: "claude-opus-4.7"` 以及 `claude-opus-4.6` → `gpt-5.5` → `gpt-5.4` 的回退顺序，还有固定收尾追问“还有没有补充要做的事情？请一次性列出，我将继续在本轮内处理。”。
+- 阶段性用户沟通采用“汇报并继续，除非用户显式修正”的节奏，而不是默认停下来等待确认；唯一需要用户显式授权的额外动作仍然是 `release` 分支的 squash-and-push。
 - 多轮项目文档必须遵循 canonical / archive 分层：顶层保留最新文件，历史版本归档到 `Agent_doc/PRD/`、`Architecture/`、`QualityCheck/`、`pd-developer-doc/<module>/`、`pd-qa-tester-doc/TestCases/`、`pd-qa-tester-doc/TestReport/` 等目录。
 - 阶段 6.5 结束时，`Agent_doc/INDEX.md` 和 `Agent_doc/Pending_User_Actions.md` 都应存在；即便本轮无待办，也要显式写出“本轮无待用户处理事项”。
 - `release` 分支只允许 `project-director` 在用户明确授权时以 squash-and-push 方式操作；`pd-developer`、`pd-qa-tester`、`pd-qa-gatekeeper` 不得越权写入。
@@ -72,8 +74,8 @@
 | `project-director` | 项目根目录、`Agent_doc` 路径、进度日志路径、Git 校验结果 | 全体角色 | 统一上下文由总控分发 |
 | `pd-requirement-analyst` | `Agent_doc/PRD.md` | `pd-architect-task-planner`、`pd-qa-gatekeeper` | PRD 是后续所有设计与审查的起点 |
 | `pd-architect-task-planner` | `Agent_doc/System_Architecture_and_Task_Breakdown.md` | `pd-developer`、`pd-qa-tester`、`pd-qa-gatekeeper` | 为开发和测试提供模块边界与任务清单 |
-| `pd-developer` | 代码、测试、`Agent_doc/pd-developer-doc/README_*.md` | `pd-qa-tester`、`pd-qa-gatekeeper` | 测试与终审都要消费开发产物 |
-| `pd-qa-tester` | `Agent_doc/pd-qa-tester-doc/Test_Cases_*.md`、`Test_Report_*.md` | `pd-qa-gatekeeper` | 终审依据之一 |
+| `pd-developer` | 代码、测试、`Agent_doc/pd-developer-doc/README_<模块名>.md` | `pd-qa-tester`、`pd-qa-gatekeeper` | 测试与终审都要消费开发产物 |
+| `pd-qa-tester` | `Agent_doc/pd-qa-tester-doc/Test_Cases_<任务标识>.md`、`Agent_doc/pd-qa-tester-doc/Test_Report_<任务标识>.md` | `pd-qa-gatekeeper` | 终审依据之一 |
 | `pd-qa-gatekeeper` | `Agent_doc/Quality_Check_Report.md` | `project-director` | 总控据此决定打回或进入归档与合入 |
 | `project-director` | `Agent_doc/INDEX.md`、`Agent_doc/Pending_User_Actions.md`、文档审阅分支信息 | 用户 / 下一轮迭代 | 作为本轮归档索引、遗留事项清单和后续恢复入口 |
 | 全体角色 | `Agent_doc/Agent_Progress_Log.md` | 全体角色 | 用于断点恢复、阶段移交和流程留痕 |
@@ -94,7 +96,7 @@
 
 示例提问：
 
-> 这里是现有的 `PRD.md`，请基于它生成系统架构设计和任务拆解文档，输出到 `Agent_doc/System_Architecture_and_Task_Breakdown.md`。
+> 这里是现有的 `Agent_doc/PRD.md`，请基于它生成系统架构设计和任务拆解文档，输出到 `Agent_doc/System_Architecture_and_Task_Breakdown.md`。
 
 ### 示例 C：已有任务文档，直接进入开发
 
@@ -102,7 +104,7 @@
 
 示例提问：
 
-> 请根据 `System_Architecture_and_Task_Breakdown.md` 中的 `TASK-003` 完成代码实现、单元测试和模块说明文档，验收标准必须全部覆盖。
+> 请根据 `Agent_doc/System_Architecture_and_Task_Breakdown.md` 中的 `TASK-003` 完成代码实现、单元测试和模块说明文档，验收标准必须全部覆盖。
 
 ### 示例 D：对现有交付物做终审
 

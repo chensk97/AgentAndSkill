@@ -25,6 +25,8 @@ Repository source agent files are standardized as `*.md`, while Copilot-compatib
 | Claude Code | `~/.claude/aas-marketplace/plugins/agent-and-skill/` | `AAS_HOME` | `./sync.sh --target claude-code` |
 | OpenCode | `~/.opencode/` | `OPENCODE_HOME` | `./sync.sh --target opencode` |
 
+For Claude Code, `AAS_HOME` should point to the plugin directory inside a marketplace layout, such as `<marketplace-root>/plugins/agent-and-skill`; `sync.sh` derives the marketplace manifest location from that resolved plugin path and still refreshes Claude Code's standard cache copy.
+
 Copilot CLI is the only runtime target whose skill invocation and child-agent orchestration contract is fully specified in the shared AGENTS files today. Claude Code and OpenCode targets are supported for file sync and packaging, but still require target-native equivalents for `superpowers:*` and delegated child-workflow conventions before they should be treated as runtime-parity deployments.
 
 ## Latest Revision Highlights
@@ -52,7 +54,7 @@ Copilot CLI is the only runtime target whose skill invocation and child-agent or
 
 ## Quick Start
 
-The `sync.sh` script in the repository root incrementally syncs `agents/` and `skills/` to your target platform directory.
+The `sync.sh` script in the repository root incrementally syncs `agents/` and `skills/` to your target platform directory, and for Claude Code also refreshes the generated plugin manifests plus the standard Claude Code cache copy.
 
 ### Prerequisites
 

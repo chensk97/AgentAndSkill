@@ -41,7 +41,8 @@
 
 ## Sync Boundary
 
-- 根目录 `sync.sh` 当前只同步 `agents/` 与 `skills/` 到目标平台目录。
+- 根目录 `sync.sh` 以仓库内的 `agents/` 与 `skills/` 作为同步源内容，并写入目标平台目录。
+- 对 Claude Code 目标，`sync.sh` 还会在部署阶段生成或更新 `.claude-plugin/plugin.json`、`.claude-plugin/marketplace.json`，并同步插件缓存目录；这些都属于部署期生成产物，而不是仓库源内容本体。
 - 因此，本文件的职责是"仓库维护总入口"，不是同步产物本身。
 - 如果未来需要把更强的运行时拦截能力做成 hooks 或其他同步物，必须先扩展同步边界，再落具体实现。
 

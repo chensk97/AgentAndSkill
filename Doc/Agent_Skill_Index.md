@@ -28,7 +28,7 @@
 | `pd-requirement-analyst` | 专项 | 原始需求转 PRD | `Agent_doc/PRD.md` | `pd-architect-task-planner`、`pd-qa-gatekeeper` |
 | `pd-architect-task-planner` | 专项 | PRD 转架构与任务拆解 | `Agent_doc/System_Architecture_and_Task_Breakdown.md` | `pd-developer`、`pd-qa-tester`、`pd-qa-gatekeeper` |
 | `pd-developer` | 专项 | 编码实现与模块说明 | 代码、测试、`Agent_doc/pd-developer-doc/README_<模块名>.md` | `pd-qa-tester`、`pd-qa-gatekeeper` |
-| `pd-qa-tester` | 专项 | 测试用例设计与黑盒验证 | `Test_Cases_*.md`、`Test_Report_*.md` | `pd-qa-gatekeeper` |
+| `pd-qa-tester` | 专项 | 测试用例设计与黑盒验证 | `Agent_doc/pd-qa-tester-doc/Test_Cases_<任务标识>.md`、`Agent_doc/pd-qa-tester-doc/Test_Report_<任务标识>.md` | `pd-qa-gatekeeper` |
 | `pd-qa-gatekeeper` | 专项 | 终审与准出裁决 | `Agent_doc/Quality_Check_Report.md` | `project-director` |
 
 ### 3.2 Skill
@@ -59,7 +59,7 @@
 | `pl-scan-project` | 项目扫描 | `LEARNINGS/PROJECT_MAP.md` | `pl-explorer` |
 | `pl-analyze-deps` | 依赖分析 | `LEARNINGS/DEPENDENCY_MAP.md` | `pl-explorer`、`pl-tutor` |
 | `pl-trace-flow` | 调用链 / 信号链追踪 | `LEARNINGS/FLOWS/<topic>.md` | `pl-deep-diver` |
-| `pl-gen-tests` | 通过测试逆向理解代码 | `LEARNINGS/TESTS/test_<module>.*`、`TEST_ANALYSIS_<module>.md` | `pl-deep-diver` |
+| `pl-gen-tests` | 通过测试逆向理解代码 | `LEARNINGS/TESTS/test_<module>.*`、`LEARNINGS/TESTS/TEST_ANALYSIS_<module>.md` | `pl-deep-diver` |
 | `pl-build-kb` | 汇总知识库 | `LEARNINGS/KNOWLEDGE_BASE/INDEX.md` | `pl-tutor` |
 
 ## 5. 维护者入口

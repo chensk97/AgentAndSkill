@@ -27,6 +27,8 @@
 | Claude Code | `~/.claude/aas-marketplace/plugins/agent-and-skill/` | `AAS_HOME` | `./sync.sh --target claude-code` |
 | OpenCode | `~/.opencode/` | `OPENCODE_HOME` | `./sync.sh --target opencode` |
 
+对于 Claude Code，`AAS_HOME` 应指向 marketplace 布局中的插件目录，例如 `<marketplace-root>/plugins/agent-and-skill`；`sync.sh` 会基于这个解析后的插件路径推导 marketplace 清单位置，并继续刷新 Claude Code 的标准缓存副本。
+
 当前只有 Copilot CLI 的 Skill 调用方式和子代理编排契约在共享 AGENTS 中被完整定义。Claude Code 和 OpenCode 目标目前支持文件同步与打包，但在补齐 `superpowers:*` 和子工作流的目标平台等价约定之前，不应被视为与 Copilot CLI 完全等价的运行时部署。
 
 ## 最新修订重点
@@ -54,7 +56,7 @@
 
 ## 快速部署
 
-根目录的 `sync.sh` 脚本用于把当前仓库中的 `agents/` 和 `skills/` 增量同步到目标平台目录。
+根目录的 `sync.sh` 脚本用于把当前仓库中的 `agents/` 和 `skills/` 增量同步到目标平台目录；对 Claude Code 目标，它还会同步刷新由该插件路径推导出的清单文件，以及 Claude Code 的标准缓存副本。
 
 ### 前置条件
 

@@ -59,7 +59,8 @@ Options:
 
 Environment:
   COPILOT_HOME              Override Copilot target directory (default: ~/.copilot)
-  AAS_HOME                  Override Claude Code target directory
+  AAS_HOME                  Override Claude Code plugin directory inside a
+                            marketplace layout
                             (default: ~/.claude/aas-marketplace/plugins/agent-and-skill)
   OPENCODE_HOME             Override OpenCode target directory (default: ~/.opencode)
 
@@ -68,10 +69,14 @@ Behavior:
   - Only additive / overwrite sync is performed
   - Extra files already present in the target are NOT deleted
   - Source files use {{AAS_HOME}} as a platform-neutral path placeholder;
-    sync.sh replaces it with the correct path for each platform:
+    sync.sh replaces it with the resolved target path for each platform
+    (default examples):
       copilot     →  ~/.copilot
       claude-code →  ~/.claude/aas-marketplace/plugins/agent-and-skill
       opencode    →  ~/.opencode
+  - Claude Code targets must point to a plugin directory inside a
+    marketplace plugins/ directory (for example:
+    ~/.claude/aas-marketplace/plugins/agent-and-skill)
   - Before syncing, checks if superpowers plugin is installed and
     offers to install it if missing (--skip-check to bypass)
   - Validation uses tools/validate_copilot_assets.py when requested
@@ -232,25 +237,71 @@ ensure_superpowers() {
 
 # ── Plugin manifest (Claude Code) ──
 
+write_generated_file() {
+  local target_path="$1"
+  local label="$2"
+  local temp_file
+  local action="created"
+
+  temp_file="$(mktemp "${TMPDIR:-/tmp}/agent-and-skill.XXXXXX")"
+  cat > "$temp_file"
+
+  if [[ "$DRY_RUN" -eq 1 ]]; then
+    if [[ ! -f "$target_path" ]]; then
+      printf '[%s] dry-run: would create %s\n' "$label" "$target_path"
+    elif ! cmp -s "$temp_file" "$target_path"; then
+      printf '[%s] dry-run: would update %s\n' "$label" "$target_path"
+    fi
+    rm -f -- "$temp_file"
+    return 0
+  fi
+
+  mkdir -p "$(dirname -- "$target_path")"
+  if [[ -f "$target_path" ]]; then
+    if cmp -s "$temp_file" "$target_path"; then
+      rm -f -- "$temp_file"
+      return 0
+    fi
+    action="updated"
+  fi
+
+  mv -- "$temp_file" "$target_path"
+  printf '[%s] %s %s\n' "$label" "$action" "$target_path"
+}
+
+
+resolve_claude_code_layout() {
+  local plugin_dir="$1"
+  local plugins_dir
+  local marketplace_candidate
+
+  plugins_dir="$(dirname -- "$plugin_dir")"
+  if [[ "$(basename -- "$plugins_dir")" != "plugins" ]]; then
+    printf 'Error: Claude Code target must be a plugin directory inside a marketplace plugins/ directory: %s\n' "$plugin_dir" >&2
+    exit 1
+  fi
+
+  marketplace_candidate="$(dirname -- "$plugins_dir")"
+  if [[ -d "$marketplace_candidate" ]]; then
+    MARKETPLACE_ROOT="$(cd -- "$marketplace_candidate" && pwd)"
+  else
+    MARKETPLACE_ROOT="$marketplace_candidate"
+  fi
+
+  PLUGIN_RELATIVE_PATH="./plugins/$(basename -- "$plugin_dir")"
+}
+
 ensure_plugin_manifest() {
   local plugin_dir="$1"
   local manifest_dir="${plugin_dir}/.claude-plugin"
 
-  if [[ ! -f "${manifest_dir}/plugin.json" ]]; then
-    if [[ "$DRY_RUN" -eq 1 ]]; then
-      printf '[manifest] dry-run: would create %s/plugin.json\n' "$manifest_dir"
-      return 0
-    fi
-    mkdir -p "$manifest_dir"
-    cat > "${manifest_dir}/plugin.json" <<MANIFEST_EOF
+  write_generated_file "${manifest_dir}/plugin.json" "manifest" <<MANIFEST_EOF
 {
   "name": "${CC_PLUGIN_NAME}",
   "description": "${CC_PLUGIN_DESC}",
   "version": "${CC_PLUGIN_VERSION}"
 }
 MANIFEST_EOF
-    printf '[manifest] created %s/plugin.json\n' "$manifest_dir"
-  fi
 }
 
 ensure_marketplace_manifest() {
@@ -258,13 +309,7 @@ ensure_marketplace_manifest() {
   local plugin_relative_path="$2"
   local manifest_dir="${marketplace_root}/.claude-plugin"
 
-  if [[ ! -f "${manifest_dir}/marketplace.json" ]]; then
-    if [[ "$DRY_RUN" -eq 1 ]]; then
-      printf '[marketplace] dry-run: would create %s/marketplace.json\n' "$manifest_dir"
-      return 0
-    fi
-    mkdir -p "$manifest_dir"
-    cat > "${manifest_dir}/marketplace.json" <<MKTPL_EOF
+  write_generated_file "${manifest_dir}/marketplace.json" "marketplace" <<MKTPL_EOF
 {
   "name": "${CC_MARKETPLACE_NAME}",
   "description": "${CC_MARKETPLACE_DESC}",
@@ -282,8 +327,6 @@ ensure_marketplace_manifest() {
   ]
 }
 MKTPL_EOF
-    printf '[marketplace] created %s/marketplace.json\n' "$manifest_dir"
-  fi
 }
 
 ensure_cache_manifests() {
@@ -293,13 +336,7 @@ ensure_cache_manifests() {
 
   local manifest_dir="${cache_dir}/.claude-plugin"
 
-  if [[ ! -f "${manifest_dir}/marketplace.json" ]]; then
-    if [[ "$DRY_RUN" -eq 1 ]]; then
-      printf '[manifest] dry-run: would create %s/marketplace.json\n' "$manifest_dir"
-      return 0
-    fi
-    mkdir -p "$manifest_dir"
-    cat > "${manifest_dir}/marketplace.json" <<MKTPL_CACHE_EOF
+  write_generated_file "${manifest_dir}/marketplace.json" "manifest" <<MKTPL_CACHE_EOF
 {
   "name": "${CC_MARKETPLACE_NAME}",
   "description": "${CC_MARKETPLACE_DESC}",
@@ -317,8 +354,6 @@ ensure_cache_manifests() {
   ]
 }
 MKTPL_CACHE_EOF
-    printf '[manifest] created %s/marketplace.json\n' "$manifest_dir"
-  fi
 }
 
 sync_to_cache() {
@@ -587,11 +622,6 @@ case "$TARGET" in
     TARGET_HOME="$CC_HOME"
     TARGET_LABEL="Claude Code"
     TARGET_KEY="claude-code"
-    MARKETPLACE_ROOT="$(cd -- "$(dirname -- "$(dirname -- "$CC_HOME")")" 2>/dev/null && pwd)" || true
-    if [[ -z "$MARKETPLACE_ROOT" ]]; then
-      MARKETPLACE_ROOT="$(dirname "$(dirname "$CC_HOME")")"
-    fi
-    PLUGIN_RELATIVE_PATH="./plugins/${CC_PLUGIN_NAME}"
     ;;
   opencode)
     TARGET_AGENTS_DIR="${OPENCODE_HOME}/agents"
@@ -660,6 +690,10 @@ if [[ "$DRY_RUN" -ne 1 ]]; then
   TARGET_HOME="$(cd -- "$TARGET_HOME" && pwd)"
   TARGET_AGENTS_DIR="${TARGET_HOME}/agents"
   TARGET_SKILLS_DIR="${TARGET_HOME}/skills"
+fi
+
+if [[ "$TARGET_KEY" == "claude-code" ]]; then
+  resolve_claude_code_layout "$TARGET_HOME"
 fi
 
 sync_dir "agents" "$SOURCE_AGENTS_DIR" "$TARGET_AGENTS_DIR" "$TARGET_HOME"

@@ -218,15 +218,45 @@ SKILL_TEMPLATE_PAIRS = [
 ]
 
 PL_NON_CANONICAL_PATHS = {
-    "LEARNING_PLAN.md": "LEARNINGS/LEARNING_PLAN.md",
-    "LEARNING_PROGRESS.md": "LEARNINGS/LEARNING_PROGRESS.md",
-    "PROJECT_MAP.md": "LEARNINGS/PROJECT_MAP.md",
-    "DEPENDENCY_MAP.md": "LEARNINGS/DEPENDENCY_MAP.md",
-    "LEARNING_PATH.md": "LEARNINGS/LEARNING_PATH.md",
-    "KNOWLEDGE_BASE/INDEX.md": "LEARNINGS/KNOWLEDGE_BASE/INDEX.md",
-    "RESOURCES/RESOURCE_LIBRARY.md": "LEARNINGS/RESOURCES/RESOURCE_LIBRARY.md",
-    "SUPPORT/SUPPORT_LOG.md": "LEARNINGS/SUPPORT/SUPPORT_LOG.md",
-    "REPORTS/LEARNING_REPORT.md": "LEARNINGS/REPORTS/LEARNING_REPORT.md",
+    "LEARNING_PLAN.md": ("LEARNINGS/", "LEARNINGS/LEARNING_PLAN.md"),
+    "LEARNING_PROGRESS.md": ("LEARNINGS/", "LEARNINGS/LEARNING_PROGRESS.md"),
+    "PROJECT_MAP.md": ("LEARNINGS/", "LEARNINGS/PROJECT_MAP.md"),
+    "DEPENDENCY_MAP.md": ("LEARNINGS/", "LEARNINGS/DEPENDENCY_MAP.md"),
+    "LEARNING_PATH.md": ("LEARNINGS/", "LEARNINGS/LEARNING_PATH.md"),
+    "KNOWLEDGE_BASE/INDEX.md": ("LEARNINGS/", "LEARNINGS/KNOWLEDGE_BASE/INDEX.md"),
+    "RESOURCES/RESOURCE_LIBRARY.md": ("LEARNINGS/", "LEARNINGS/RESOURCES/RESOURCE_LIBRARY.md"),
+    "SUPPORT/SUPPORT_LOG.md": ("LEARNINGS/", "LEARNINGS/SUPPORT/SUPPORT_LOG.md"),
+    "REPORTS/LEARNING_REPORT.md": ("LEARNINGS/", "LEARNINGS/REPORTS/LEARNING_REPORT.md"),
+    "TEST_ANALYSIS_<module>.md": ("LEARNINGS/TESTS/", "LEARNINGS/TESTS/TEST_ANALYSIS_<module>.md"),
+}
+
+DOC_REQUIRED_PATH_SNIPPETS = {
+    "Doc/README(project-director).md": [
+        "Agent_doc/PRD.md",
+        "Agent_doc/System_Architecture_and_Task_Breakdown.md",
+        "Agent_doc/pd-developer-doc/README_<模块名>.md",
+        "Agent_doc/pd-qa-tester-doc/Test_Cases_<任务标识>.md",
+        "Agent_doc/pd-qa-tester-doc/Test_Report_<任务标识>.md",
+    ],
+    "Doc/Agent_Skill_Index.md": [
+        "Agent_doc/pd-qa-tester-doc/Test_Cases_<任务标识>.md",
+        "Agent_doc/pd-qa-tester-doc/Test_Report_<任务标识>.md",
+        "LEARNINGS/TESTS/TEST_ANALYSIS_<module>.md",
+    ],
+}
+
+TARGETED_FORBIDDEN_PATH_PATTERNS = {
+    "agents/pd-architect-task-planner.md": [
+        (r"(?<!Agent_doc/)PRD\.md", "Agent_doc/PRD.md"),
+        (r"(?<!Agent_doc/)System_Architecture_and_Task_Breakdown\.md", "Agent_doc/System_Architecture_and_Task_Breakdown.md"),
+    ],
+    "agents/pd-developer.md": [
+        (r"(?<!Agent_doc/)System_Architecture_and_Task_Breakdown\.md", "Agent_doc/System_Architecture_and_Task_Breakdown.md"),
+    ],
+    "Doc/README(project-director).md": [
+        (r"(?<!Agent_doc/)PRD\.md", "Agent_doc/PRD.md"),
+        (r"(?<!Agent_doc/)System_Architecture_and_Task_Breakdown\.md", "Agent_doc/System_Architecture_and_Task_Breakdown.md"),
+    ],
 }
 
 
@@ -244,18 +274,30 @@ def check_skill_template_consistency(errors: list[str]) -> None:
             fail(errors, f"Skill template diverged from canonical: {skill_path} != {canonical_path}")
 
 
-def check_pl_canonical_paths(errors: list[str]) -> None:
+def check_canonical_doc_paths(errors: list[str]) -> None:
     for markdown_path in iter_markdown_files():
         if markdown_path.name == "CHANGELOG.md":
             continue
         text = load_text(markdown_path)
-        for non_canonical, canonical in PL_NON_CANONICAL_PATHS.items():
-            pattern = re.compile(rf"(?<!LEARNINGS/){re.escape(non_canonical)}")
+        for non_canonical, (allowed_prefix, canonical) in PL_NON_CANONICAL_PATHS.items():
+            pattern = re.compile(rf"(?<!{re.escape(allowed_prefix)}){re.escape(non_canonical)}")
             if pattern.search(text):
                 fail(
                     errors,
-                    f"Non-canonical PL path in {markdown_path.relative_to(REPO_ROOT)}: '{non_canonical}' should be '{canonical}'"
+                    f"Non-canonical documented path in {markdown_path.relative_to(REPO_ROOT)}: '{non_canonical}' should be '{canonical}'"
                 )
+
+    for relative_path, snippets in DOC_REQUIRED_PATH_SNIPPETS.items():
+        text = load_text(REPO_ROOT / relative_path)
+        for snippet in snippets:
+            if snippet not in text:
+                fail(errors, f"Missing canonical documented path in {relative_path}: '{snippet}'")
+
+    for relative_path, patterns in TARGETED_FORBIDDEN_PATH_PATTERNS.items():
+        text = load_text(REPO_ROOT / relative_path)
+        for pattern_text, canonical in patterns:
+            if re.search(pattern_text, text):
+                fail(errors, f"Non-canonical documented path in {relative_path}: should use '{canonical}'")
 
 
 def main() -> int:
@@ -266,7 +308,7 @@ def main() -> int:
     check_markdown_links(errors)
     check_versioned_docs(errors)
     check_skill_template_consistency(errors)
-    check_pl_canonical_paths(errors)
+    check_canonical_doc_paths(errors)
 
     if errors:
         print("Validation failed:")
@@ -277,7 +319,7 @@ def main() -> int:
     print("Validation passed:")
     print(f"- registry: {REGISTRY_PATH.relative_to(REPO_ROOT)}")
     print(f"- total index: {INDEX_PATH.relative_to(REPO_ROOT)}")
-    print("- shared AGENTS references, Superpowers sections, markdown links, PL canonical paths, skill template consistency, and required files are consistent")
+    print("- shared AGENTS references, Superpowers sections, markdown links, canonical documented paths, skill template consistency, and required files are consistent")
     return 0
 
 

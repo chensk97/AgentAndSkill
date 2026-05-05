@@ -21,7 +21,7 @@ argument-hint: "提供开发任务描述（含验收标准）和架构设计内�
 
 ## 输入
 
-- 具体的开发任务描述（含验收标准），来自 `System_Architecture_and_Task_Breakdown.md`
+- 具体的开发任务描述（含验收标准），来自 `Agent_doc/System_Architecture_and_Task_Breakdown.md`
 - 相关的架构设计内容（模块职责、接口定义、数据模型）
 - 可选：技术栈规范、编码规范、现有代码库
 - 可选：共享上下文（项目根目录、`Agent_doc` 路径、`Agent_doc/pd-developer-doc` 路径、`Agent_Progress_Log.md` 路径，以及 GitLab 仓库信息、当前基线分支、任务短描述）
