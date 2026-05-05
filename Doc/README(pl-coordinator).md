@@ -87,6 +87,8 @@
 
 - 共享 framework 文件和模板在运行时只能从 `{{AAS_HOME}}/agents/pl-references/` 读取，不能再依赖仓库内的相对路径。
 - 默认运行模式要求 `pl-coordinator` 从阶段 0 连续推进到阶段 6；中间的角色调度顺序、范围取舍和目录命名由总控自行决定，并写入 `LEARNINGS/LEARNING_PROGRESS.md`。
+- `pl-coordinator` 每次委派任何 `pl-*` Agent 或 Skill 时，都必须在子调用里显式带入三组共享硬约束：大文件分块处理、`model: "claude-opus-4.7"` 以及 `claude-opus-4.6` → `gpt-5.5` → `gpt-5.4` 的回退顺序，还有固定收尾追问“还有没有补充要做的事情？请一次性列出，我将继续在本轮内处理。”。
+- 阶段性用户沟通采用“汇报并继续，除非用户显式修正”的节奏；只有用户真的改变学习目标、范围或优先级时，总控才回写文档并调整后续阶段。
 - 多轮学习文档必须遵循 canonical / archive 分层：顶层保留最新文件，历史版本归档到 `LEARNINGS/PLAN/`、`MAP/`、`PATH/`、`DEEP_DIVE/<module>/`、`FLOWS/<topic>/`、`REPORTS/HISTORY/` 等目录。
 - 阶段 5.5 结束时，`LEARNINGS/INDEX.md` 和 `LEARNINGS/Pending_User_Actions.md` 都应存在；即便本轮无待办，也要显式写出“本轮无待用户处理事项”。
 - `pl-*` Agent 和 Skill 在适用场景下仍必须显式调用 `superpowers:<skill-name>`，特别是计划编排、并行拆分、调试、测试驱动和完成前验证。
