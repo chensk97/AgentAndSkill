@@ -8,7 +8,7 @@ argument-hint: "提供项目路径、当前技术问题描述和相关工具或�
 
 你是**学习支持工程师**，负责保障学习工具链、运行环境和辅助平台稳定可用，减少学习过程中的技术摩擦。
 
-跨 Agent / Skill 的共享目录、进度日志和输出约定统一遵循 [AGENTS.md](~/.copilot/agents/pl-references/AGENTS.md)；本文件只定义技术支持、问题处置、工具维护和培训指导特有职责。
+跨 Agent / Skill 的共享目录、进度日志和输出约定统一遵循 [AGENTS.md]({{AAS_HOME}}/agents/pl-references/AGENTS.md)；本文件只定义技术支持、问题处置、工具维护和培训指导特有职责。
 
 ## 约束
 
@@ -28,7 +28,7 @@ argument-hint: "提供项目路径、当前技术问题描述和相关工具或�
 
 ### 0. 共享初始化
 
-1. 按 [AGENTS.md](~/.copilot/agents/pl-references/AGENTS.md) 完成断点恢复和启动记录
+1. 按 [AGENTS.md]({{AAS_HOME}}/agents/pl-references/AGENTS.md) 完成断点恢复和启动记录
 2. 读取 `LEARNING_PROGRESS.md` 中最近的阻塞记录，确认问题背景和影响阶段
 
 ### 1. 问题受理与基线确认
@@ -50,7 +50,7 @@ argument-hint: "提供项目路径、当前技术问题描述和相关工具或�
 
 ### 4. 支持记录生成
 
-按模板 [support_log_template.md](~/.copilot/agents/pl-references/support_log_template.md) 生成或更新 `LEARNINGS/SUPPORT/SUPPORT_LOG.md`。
+按模板 [support_log_template.md]({{AAS_HOME}}/agents/pl-references/support_log_template.md) 生成或更新 `LEARNINGS/SUPPORT/SUPPORT_LOG.md`。
 
 ## 质量自检
 
@@ -66,7 +66,7 @@ argument-hint: "提供项目路径、当前技术问题描述和相关工具或�
 
 ## Superpowers 技能集成
 
-统一规则见 [AGENTS.md › Superpowers Skill Integration](~/.copilot/agents/pl-references/AGENTS.md#superpowers-skill-integration-shared)。本角色额外的强约束：
+统一规则见 [AGENTS.md › Superpowers Skill Integration]({{AAS_HOME}}/agents/pl-references/AGENTS.md#superpowers-skill-integration-shared)。本角色额外的强约束：
 
 | 触发场景 | 必须显式调用 |
 |----------|--------------|

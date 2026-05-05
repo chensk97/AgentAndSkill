@@ -1,103 +1,161 @@
 # AgentAndSkill
 
-这是一个围绕 Agent / Skill 协作方式整理出来的实践型工程。它的目标不是单纯堆提示词，而是把两类高频工作流拆成可复用、可导航、可扩展、可治理的角色体系与模板体系：一条面向“从需求到交付”的项目流程，一条面向“项目学习与知识沉淀”的学习流程。
+**English** | [中文](./README_zh.md)
 
-当前版本相比早期整理稿，已经从“角色说明合集”推进到“可执行的协作框架”。除了统一的 Superpowers 技能接入规则和分角色强制调用场景，这一轮还把共享框架文件的位置、文档版本归档方式、默认自主推进策略、待用户处理事项记录和收尾审计流程都写成了硬约束。
+A practical engineering project built around Agent / Skill collaboration patterns. Rather than simply stacking prompts, it decomposes two high-frequency workflows into reusable, navigable, extensible, and governable role and template systems: one for the "requirements to delivery" project pipeline, and one for "project learning and knowledge distillation."
 
-整体组织仍然是 `.copilot` 风格目录预演：`agents/` 放角色定义，`skills/` 放能力模块，`Doc/` 放导航说明与入口文档。需要注意的是，仓库中的 `agents/pd-references/` 和 `agents/pl-references/` 继续作为版本化内容存在，但 Agent / Skill 在运行时的交叉引用已经统一切换到 `~/.copilot/agents/pd-references/` 与 `~/.copilot/agents/pl-references/`。
+The current version has evolved from a "role description collection" into an "executable collaboration framework." In addition to unified Superpowers skill integration rules and per-role mandatory invocation scenarios, shared framework file locations, document versioning and archival policies, default autonomous execution strategies, pending user action records, and closing audit workflows have all been codified as hard constraints.
 
-## 这份工程里有什么
+The repository root now also includes [AGENTS.md](./AGENTS.md) as the governance entry for maintaining this Agent / Skill project itself. Runtime behavior still inherits from [agents/pd-references/AGENTS.md](./agents/pd-references/AGENTS.md) and [agents/pl-references/AGENTS.md](./agents/pl-references/AGENTS.md); the root governance file defines rule hierarchy, maintenance gates, sync boundaries, and anti-bypass review expectations.
 
-| 模块 | 定位 | 组成 | 当前状态 |
-|------|------|------|----------|
-| `project-director` | 从原始需求一路推进到架构、开发、测试、终审、文档审计、主干集成，并按需负责远端 release 发布 | `pd-requirement-analyst`、`pd-architect-task-planner`、`pd-developer`、`pd-qa-tester`、`pd-qa-gatekeeper` | 已实际使用；本轮补强了运行时 framework 路径、默认自主推进、`Agent_doc` 归档审计、`Pending_User_Actions` 和 release 工作流 |
-| `pl-coordinator` | 围绕一个现有项目做学习规划、项目扫描、深挖、知识库沉淀、复盘和文档审计 | `pl-resource-collector`、`pl-explorer`、`pl-support-engineer`、`pl-deep-diver`、`pl-tutor`、`pl-analyst`，以及若干辅助 Skill | 设计已成型；本轮补齐了运行时 framework 路径、学习文档归档、默认自主推进、`Pending_User_Actions` 和最终索引输出 |
+Repository source agent files are standardized as `*.md`, while Copilot-compatible `*.agent.md` filenames can still be emitted at deployment time through `sync.sh --agent-suffix agent.md`.
 
-## 本轮修订重点
+## What's Inside
 
-### 1. 共享框架文件位置被收敛成硬规则
+| Module | Purpose | Composition | Status |
+|--------|---------|-------------|--------|
+| `project-director` | End-to-end orchestration from requirements through architecture, development, testing, final review, document audit, and main branch integration; handles remote release publishing on demand | `pd-requirement-analyst`, `pd-architect-task-planner`, `pd-developer`, `pd-qa-tester`, `pd-qa-gatekeeper`, plus `pd-check-repo-readiness` and `pd-audit-agent-doc` | Validated in practice |
+| `pl-coordinator` | Organizes learning workflows around existing projects: planning, scanning, deep dives, knowledge base distillation, retrospectives, and document auditing | `pl-resource-collector`, `pl-explorer`, `pl-support-engineer`, `pl-deep-diver`, `pl-tutor`, `pl-analyst`, plus auxiliary Skills | Design complete, pending further field validation |
 
-- `pd-*` Agent 及其模板现在统一引用 `~/.copilot/agents/pd-references/`。
-- `pl-*` Agent / Skill 及其模板现在统一引用 `~/.copilot/agents/pl-references/`。
-- 如果运行时无法读取这些目录，Agent 必须停止并报错，而不是在用户项目里偷偷再生成一份 `AGENTS.md` 或模板文件。
-- 这让仓库内的 `*-references/` 更像“受版本控制的源内容与说明入口”，而不是执行时依赖的相对路径。
+## Supported Platforms
 
-### 2. PD / PL 两条线都新增了多轮文档归档治理
+| Platform | Default Target Path | Environment Override | Deploy Command |
+|----------|--------------------|--------------------|----------------|
+| GitHub Copilot CLI | `~/.copilot/` | `COPILOT_HOME` | `./sync.sh --target copilot` |
+| Claude Code | `~/.claude/aas-marketplace/plugins/agent-and-skill/` | `AAS_HOME` | `./sync.sh --target claude-code` |
+| OpenCode | `~/.opencode/` | `OPENCODE_HOME` | `./sync.sh --target opencode` |
 
-- `agents/pd-references/AGENTS.md` 新增 `Document Versioning And Archival (multi-round projects)`，明确 `Agent_doc` 下最新文档保留 canonical 文件名，历史版本必须迁移到 `PRD/`、`Architecture/`、`QualityCheck/` 等子目录。
-- `agents/pl-references/AGENTS.md` 新增 `Document Versioning And Archival (multi-round learning)`，要求 `LEARNINGS` 下历史版本按 `PLAN/`、`MAP/`、`PATH/`、`REPORTS/HISTORY/` 等目录归档。
-- 两条线都要求“移动 + 改名归档”，禁止直接删除历史版本，并且必须把归档动作追加到共享进度日志。
+## Latest Revision Highlights
 
-### 3. `project-director` 从“总控调度”升级为“默认自主闭环”
+### 1. Unified Multi-Platform Sync
+- `sync.sh` replaces `sync_to_copilot.sh` and now supports Copilot CLI, Claude Code, and OpenCode from one entry point.
+- Deployment can run repository validation via `--validate` or `--validate-only` before any sync.
+- Superpowers presence is checked before deployment, with platform-specific installation guidance.
 
-- 默认模式下，`project-director` 会从阶段 0 一直推进到阶段 7，除非用户显式取消这种自动推进方式。
-- 任何因权限、环境或外部依赖无法完成的事项，都要沉淀到 `Agent_doc/Pending_User_Actions.md`，即便“本轮无待办”也必须显式生成该文件。
-- 新增阶段 6.5：`Agent_doc` 文档审计与版本整理。该阶段要求盘点版本化文档、修复相对链接、生成 `Agent_doc/INDEX.md`，并补做归档提交。
-- 完成主干集成后，本地必须切回 `main` 且 `git status` clean，才能对外宣布项目完成。
-- 远端 `release` 分支仍然只允许由 `project-director` 在用户明确要求时执行 squash-and-push。
+### 2. Runtime Path and File Naming Normalization
+- All runtime cross-file references now use the platform-neutral `{{AAS_HOME}}` placeholder inside source files.
+- `sync.sh` resolves `{{AAS_HOME}}` to the actual target platform path during deployment.
+- Source agent definitions were normalized from `*.agent.md` to `*.md`; Copilot deployments can still rename them through `--agent-suffix agent.md` for compatibility.
 
-### 4. `pl-coordinator` 也新增了默认自主推进与学习文档审计
+### 3. Governance and Discoverability Upgrades
+- Root-level [AGENTS.md](./AGENTS.md) now serves as the repository governance entry point.
+- [registry/agent_skill_registry.json](./registry/agent_skill_registry.json) provides a machine-readable manifest of all agents and skills.
+- [Doc/Agent_Skill_Index.md](./Doc/Agent_Skill_Index.md) adds a human-readable cross-suite index.
+- [tools/validate_copilot_assets.py](./tools/validate_copilot_assets.py) validates shared AGENTS inheritance, links, required files, and template consistency.
 
-- 默认模式下，`pl-coordinator` 会从阶段 0 一直推进到阶段 6，中间的角色调度和范围取舍自行决策，并写入 `LEARNINGS/LEARNING_PROGRESS.md`。
-- 若有不能由 Agent 自行完成的事项，必须写入 `LEARNINGS/Pending_User_Actions.md`；无待办也必须保留“本轮无待用户处理事项”的明确记录。
-- 新增阶段 5.5：学习文档审计与版本整理。该阶段会归档多轮学习文档、修复引用、生成 `LEARNINGS/INDEX.md`，并在最终总结里显式报出索引和待办文件路径。
-- 如果学习流程涉及 Git 推送，其收尾约束与 `project-director` 对齐：最终本地切回 `main` 并保持 clean。
+### 4. Shared Rule and Skill Expansion
+- PD gained two reusable Skills: `pd-check-repo-readiness` and `pd-audit-agent-doc`.
+- PD and PL shared AGENTS files now both enforce chunked large-file handling, explicit subagent model selection, mandatory completion follow-up, and runtime anti-bypass audits.
+- New archive-audit and repo-readiness templates were added to support those flows.
 
-### 5. 显式技能调用和角色边界继续收紧
+## Quick Start
 
-- 两套共享 `AGENTS.md` 继续要求在对应场景显式调用 `superpowers:<skill-name>`，不允许只在文档里提到技能名。
-- `pd-developer`、`pd-qa-tester` 不得直接写 `main` 或 `release`；`pd-qa-gatekeeper` 可以审计 release 合规性，但仍不执行 push / merge。
-- `skills/pl-analyze-deps`、`pl-build-kb`、`pl-gen-tests`、`pl-scan-project`、`pl-trace-flow` 也同步改为引用 `~/.copilot/agents/pl-references/`，并继续保留并行拆分、调试、测试驱动和完成前验证的强约束。
+The `sync.sh` script in the repository root incrementally syncs `agents/` and `skills/` to your target platform directory.
 
-## 适合什么场景
+### Prerequisites
 
-- 如果你想把一个需求从模糊描述推进到可交付结果，重点看 `project-director` 这条线。
-- 如果你想系统化地学习一个项目、沉淀阅读路径和知识库，重点看 `pl-coordinator` 这条线。
-- 如果你只需要局部能力，也可以单独复用 `skills/` 下的扫描、依赖分析、链路追踪、测试草案和知识库汇总能力。
+This project depends on the [Superpowers](https://github.com/obra/superpowers) plugin. `sync.sh` automatically checks for its presence before deployment and prompts installation commands if missing (use `--skip-check` to bypass).
 
-## 当前版本的运行特征
-
-- 这是一个偏“制度化协作”的 Agent / Skill 工程，不再只是静态模板集合。
-- 运行时共享 framework 文件与模板被外置到 `~/.copilot/agents/...`，仓库内容更偏向版本管理、审阅和演化基线。
-- 两条总控流程都把“默认自主推进 + 归档审计 + `Pending_User_Actions` + 索引输出”作为标准收尾动作。
-- 如果你打算把这套内容迁移到自己的 Copilot CLI 工作流，除了准备好 Superpowers 插件环境，还要同步准备 `~/.copilot/agents/pd-references/` 和 `~/.copilot/agents/pl-references/` 这两套共享 framework 文件。
-
-## 快速同步到 `~/.copilot`
-
-为了便于把当前仓库中的 `agents/` 和 `skills/` 增量同步到用户目录，根目录新增了 `sync_to_copilot.sh`。
-
-这个脚本的行为约束如下：
-
-- 以脚本所在仓库根目录作为唯一 source of truth，不依赖运行时当前工作目录。
-- 默认对比并同步到 `~/.copilot/agents` 和 `~/.copilot/skills`。
-- 如果发现差异，则以当前仓库内容为准执行增量覆盖；仅做新增 / 覆盖，不删除目标目录下额外存在的文件。
-- 默认直接应用；如果只想先查看差异，可以先执行 dry-run。
-- 如需调试或同步到其他位置，可以通过环境变量 `COPILOT_HOME` 覆盖默认目标目录。
-
-示例：
-
+**Install Superpowers for Copilot CLI:**
 ```bash
-./sync_to_copilot.sh --dry-run
-./sync_to_copilot.sh
-COPILOT_HOME=/tmp/copilot-sandbox ./sync_to_copilot.sh --dry-run
+copilot plugin marketplace add obra/superpowers-marketplace
+copilot plugin install superpowers@superpowers-marketplace
 ```
 
-如果你后续继续修改了当前仓库中的 Agent / Skill 定义，建议在提交前先跑一次 `./sync_to_copilot.sh --dry-run`，确认会写入哪些内容。
+**Install Superpowers for Claude Code:**
+```bash
+# Run inside a Claude Code session
+/plugin install superpowers@claude-plugins-official
+```
 
-## 补充说明
+**Install Superpowers for OpenCode:**
+```bash
+git clone https://github.com/obra/superpowers ~/.opencode/plugins/superpowers
+```
 
-- [project-director 导航页](./Doc/README%28project-director%29.md)
-- [pl-coordinator 导航页](./Doc/README%28pl-coordinator%29.md)
-- [变更记录](./CHANGELOG.md)
+### Deployment Examples
 
-## 我的使用情况
+```bash
+# Deploy to Copilot (preview + apply)
+./sync.sh --target copilot --dry-run
+./sync.sh --target copilot
 
-- `project-director` 是这份工程里我已经实际应用过的一套流程，它更偏向真实项目交付时的阶段编排、分支治理、文档归档和留痕管理。
-- `pl-coordinator` 是我为“项目学习与知识沉淀”整理出来的另一套流程，目前还处在设计完成、等待更多实战验证的阶段，但流程约束、文档审计和技能联动已经补齐。
+# Deploy to Claude Code (preview + apply)
+./sync.sh --target claude-code --dry-run
+./sync.sh --target claude-code
 
-## 致谢
+# Deploy to OpenCode (preview + apply)
+./sync.sh --target opencode --dry-run
+./sync.sh --target opencode
 
-感谢恩师：
+# Validate repository consistency before deployment
+./sync.sh --target copilot --validate --dry-run
+
+# Validate only, no deployment
+./sync.sh --target copilot --validate-only
+
+# Emit Copilot-style .agent.md files on deployment
+./sync.sh --target copilot --agent-suffix agent.md --dry-run
+
+# Use a custom target path
+COPILOT_HOME=/tmp/copilot-sandbox ./sync.sh --target copilot --dry-run
+
+# Skip superpowers check
+./sync.sh --target copilot --skip-check
+```
+
+### Script Behavior
+
+- Uses the script's repository root as the single source of truth.
+- Select deployment target via `--target`: `copilot`, `claude-code`, or `opencode`.
+- Additive / overwrite sync only — extra files in the target are NOT deleted.
+- Source files use the platform-neutral `{{AAS_HOME}}` placeholder for all cross-file path references; `sync.sh` replaces it with the actual platform path during deployment.
+- Repository agent source files are stored as `*.md`; Copilot deployment can optionally rename them to `*.agent.md` with `--agent-suffix agent.md`.
+- For Claude Code deployments, automatically creates plugin manifests and syncs to the plugin cache directory.
+- The root `AGENTS.md` is NOT synced — it serves as the repository governance entry point, not a runtime artifact.
+
+## Core Features
+
+### 1. Framework File Locations as Hard Rules
+- `pd-*` agents uniformly reference `{{AAS_HOME}}/agents/pd-references/`.
+- `pl-*` agents and skills uniformly reference `{{AAS_HOME}}/agents/pl-references/`.
+
+### 2. Multi-Round Document Archival Governance
+- PD pipeline: canonical files in `Agent_doc` root + type-specific subdirectories for historical versions.
+- PL pipeline: canonical files in `LEARNINGS` root + type-specific subdirectories for historical versions.
+
+### 3. Default Autonomous Execution
+- `project-director` defaults to autonomous progression from Phase 0 through Phase 7, including Phase 6.5 document audit.
+- `pl-coordinator` defaults to autonomous progression from Phase 0 through Phase 6, including Phase 5.5 learning document audit.
+- All items that cannot be completed due to permissions/environment are recorded in `Pending_User_Actions.md`.
+
+### 4. Shared Execution Rules
+- Large file chunked read/write, explicit model selection for subagents, mandatory completion follow-up.
+- Runtime anti-bypass audit: parent agents must explicitly carry forward key rules when delegating to subagents.
+
+### 5. Repository Governance and Validation
+- Root-level `AGENTS.md` governs rule hierarchy and change gates.
+- `registry/agent_skill_registry.json` provides a machine-readable manifest.
+- `Doc/Agent_Skill_Index.md` provides a human-readable cross-suite map.
+- `tools/validate_copilot_assets.py` checks reference consistency, links, and declarations.
+- PD pipeline includes `pd-check-repo-readiness` and `pd-audit-agent-doc` auxiliary Skills.
+
+## Additional Resources
+
+- [Repository Governance Entry](./AGENTS.md)
+- [project-director Navigation](./Doc/README%28project-director%29.md)
+- [pl-coordinator Navigation](./Doc/README%28pl-coordinator%29.md)
+- [Agent / Skill Index](./Doc/Agent_Skill_Index.md)
+- [Changelog](./CHANGELOG.md)
+
+## Usage Notes
+
+- `project-director` is the pipeline I've actively used in practice — it focuses on real project delivery with phase orchestration, branch governance, document archival, and audit trails.
+- `pl-coordinator` is the pipeline I designed for "project learning and knowledge distillation" — its design is complete with full workflow constraints, document auditing, and skill integration, but awaits further field validation.
+
+## Acknowledgments
+
+Special thanks to:
 
 - GitHub Copilot
 - GPT-5.4

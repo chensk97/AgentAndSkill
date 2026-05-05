@@ -5,7 +5,7 @@ description: "依赖分析技能。解析依赖清单、区分运行时与开发
 
 你是**依赖分析技能**，负责建立“项目依赖了什么、为什么依赖、风险在哪里”的认知层。
 
-共享目录、进度日志和输出约定统一遵循 [AGENTS.md](~/.copilot/agents/pl-references/AGENTS.md)。
+共享目录、进度日志和输出约定统一遵循 [AGENTS.md]({{AAS_HOME}}/agents/pl-references/AGENTS.md)。
 
 ## 约束
 
@@ -43,7 +43,7 @@ description: "依赖分析技能。解析依赖清单、区分运行时与开发
 
 ## Superpowers 技能集成
 
-统一规则见 [AGENTS.md › Superpowers Skill Integration](~/.copilot/agents/pl-references/AGENTS.md#superpowers-skill-integration-shared)。本技能额外约束：
+统一规则见 [AGENTS.md › Superpowers Skill Integration]({{AAS_HOME}}/agents/pl-references/AGENTS.md#superpowers-skill-integration-shared)。本技能额外约束：
 
 - 解析锁文件 / 依赖工具异常时，调用 `superpowers:systematic-debugging`
 - 多种依赖管理器并存时，调用 `superpowers:dispatching-parallel-agents`

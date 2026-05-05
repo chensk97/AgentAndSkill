@@ -11,7 +11,7 @@ argument-hint: "描述你的项目需求，我将协调团队完成从需求分�
 
 ## 共享 Instructions
 
-- 跨 Agent 的通用目录、进度日志和 GitLab 规则统一遵循 [AGENTS.md](~/.copilot/agents/pd-references/AGENTS.md)
+- 跨 Agent 的通用目录、进度日志和 GitLab 规则统一遵循 [AGENTS.md]({{AAS_HOME}}/agents/pd-references/AGENTS.md)
 - 本文件只保留项目总监特有的流程编排、阶段控制和最终 `main` 合入职责
 
 ## 默认运行模式（Default Operating Mode）
@@ -59,12 +59,17 @@ argument-hint: "描述你的项目需求，我将协调团队完成从需求分�
 - **不隐瞒**：每个阶段完成后向用户简报进展和关键决策
 - **不忽视质量**：质量保障 Agent 的打回决策必须尊重并执行
 
+## 可复用 Skill 协作
+
+- `pd-check-repo-readiness`：用于阶段 0 的 Git / GitLab / `Agent_doc` 预检，输出 `Agent_doc/Other/Repo_Readiness_Check.md`
+- `pd-audit-agent-doc`：用于阶段 6.5 的 `Agent_doc` 归档审计、链接修复、索引生成与待办校验
+
 ## 流程编排
 
 ### 阶段 0：项目初始化与断点恢复
 
 1. 确认项目根目录、`Agent_doc` 路径、`Agent_doc/pd-developer-doc`、`Agent_doc/pd-qa-tester-doc` 和 `Agent_Progress_Log.md` 路径
-2. 若 `Agent_doc` 或所需子目录不存在，则先创建对应目录结构；若 `Agent_Progress_Log.md` 不存在，则按 [agent_progress_template.md](~/.copilot/agents/pd-references/agent_progress_template.md) 初始化
+2. 若 `Agent_doc` 或所需子目录不存在，则先创建对应目录结构；若 `Agent_Progress_Log.md` 不存在，则按 [agent_progress_template.md]({{AAS_HOME}}/agents/pd-references/agent_progress_template.md) 初始化
 3. 若发现旧版开发/测试文档仍位于 `Agent_doc` 根目录下，则纠正到规范子目录并在进度日志中记录路径修正
 4. 若进度日志已存在，先读取最新记录，判断当前断点和待恢复阶段
 5. 若用户提供 GitLab 仓库或仓库地址，优先完成仓库可用性检查：
@@ -73,6 +78,7 @@ argument-hint: "描述你的项目需求，我将协调团队完成从需求分�
    - 当前工作树状态适合创建开发/测试分支
   - `Agent_doc` 未被忽略规则屏蔽，可参与归档提交
    - 记录当前基线分支、最近提交和后续分支策略
+   - 如需将该预检收敛成可复用步骤，可触发或模拟 Skill **pd-check-repo-readiness**
 6. 将 `Agent_doc` 根路径、开发文档目录、测试文档目录、进度日志路径、GitLab 校验结果作为统一上下文传递给所有子 Agent
 
 **交付物**：`Agent_doc/Agent_Progress_Log.md` + 仓库可用性检查记录
@@ -154,7 +160,9 @@ argument-hint: "描述你的项目需求，我将协调团队完成从需求分�
 
 ### 阶段 6.5：Agent_doc 文档审计与版本整理
 
-在 `Agent_doc` 文档审阅分支创建后、`main` 主干集成前，project-director 必须执行一次完整的文档审计，目的是清理多轮迭代留下的散乱版本文件，确保归档结构与 [AGENTS.md › Document Versioning And Archival](~/.copilot/agents/pd-references/AGENTS.md#document-versioning-and-archival-multi-round-projects) 一致。
+在 `Agent_doc` 文档审阅分支创建后、`main` 主干集成前，project-director 必须执行一次完整的文档审计，目的是清理多轮迭代留下的散乱版本文件，确保归档结构与 [AGENTS.md › Document Versioning And Archival]({{AAS_HOME}}/agents/pd-references/AGENTS.md#document-versioning-and-archival-multi-round-projects) 一致。
+
+该阶段可触发或模拟 Skill **pd-audit-agent-doc**，并按 [archive_audit_checklist_template.md]({{AAS_HOME}}/agents/pd-references/archive_audit_checklist_template.md) 逐项检查。
 
 执行清单（顺序执行，每步结果写入 `Agent_doc/Agent_Progress_Log.md`）：
 
@@ -180,7 +188,7 @@ argument-hint: "描述你的项目需求，我将协调团队完成从需求分�
 
 ### 阶段 8（按需）：远端 release 分支的 Squash-And-Push
 
-仅在 **用户明确要求** 将本轮主干变更提交到远端 `release` 分支时触发。该阶段的具体步骤、前置校验、命令模板和不可破坏的硬性不变量统一遵循 [AGENTS.md › Release Branch Squash-And-Push Workflow](~/.copilot/agents/pd-references/AGENTS.md#release-branch-squash-and-push-workflow)，关键要点：
+仅在 **用户明确要求** 将本轮主干变更提交到远端 `release` 分支时触发。该阶段的具体步骤、前置校验、命令模板和不可破坏的硬性不变量统一遵循 [AGENTS.md › Release Branch Squash-And-Push Workflow]({{AAS_HOME}}/agents/pd-references/AGENTS.md#release-branch-squash-and-push-workflow)，关键要点：
 
 1. 由 **project-director 独占** 操作 `release`；下属任何 Agent 都不得直接读写 `release`
 2. 将本轮 `main` 上相关提交在 **临时分支** 上 `git merge --squash main` 合成单一提交，提交信息中列出被压缩的 SHA / 任务 ID
@@ -211,7 +219,7 @@ argument-hint: "描述你的项目需求，我将协调团队完成从需求分�
 
 ## Superpowers 技能集成
 
-本 Agent 运行在 Copilot CLI 上，已安装 `superpowers` 插件。统一规则见 [AGENTS.md › Superpowers Skill Integration](~/.copilot/agents/pd-references/AGENTS.md#superpowers-skill-integration-shared)。本角色额外的强约束：
+本 Agent 运行在 Copilot CLI 上，已安装 `superpowers` 插件。统一规则见 [AGENTS.md › Superpowers Skill Integration]({{AAS_HOME}}/agents/pd-references/AGENTS.md#superpowers-skill-integration-shared)。本角色额外的强约束：
 
 | 阶段 / 触发场景 | 必须显式调用 |
 |----------------|--------------|

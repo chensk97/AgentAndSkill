@@ -1,12 +1,12 @@
 # pl-coordinator 导航页
 
-这套示例面向“项目学习与知识沉淀”的端到端流程。当前目录仍然可以视为未来 `.copilot/` 根目录的预演版本：`agents/` 与 `skills/` 同级、`agents/pl-references/` 提供版本化的共享规则与模板说明、`skills/` 下各技能保持目录化结构；但运行时的交叉引用已经统一切换到 `~/.copilot/agents/pl-references/`。
+这套示例面向“项目学习与知识沉淀”的端到端流程。当前目录仍然可以视为未来 `.copilot/` 根目录的预演版本：`agents/` 与 `skills/` 同级、`agents/pl-references/` 提供版本化的共享规则与模板说明、`skills/` 下各技能保持目录化结构；但运行时的交叉引用已经统一切换到 `{{AAS_HOME}}/agents/pl-references/`。
 
 ## 1. 入口
 
 ### 推荐总入口
 
-- [agents/pl-coordinator.agent.md](../agents/pl-coordinator.agent.md)
+- [agents/pl-coordinator.md](../agents/pl-coordinator.md)
 
 适用场景：
 
@@ -18,12 +18,12 @@
 
 | 入口 Agent | 适用场景 | 主要输出 |
 |------------|----------|----------|
-| [agents/pl-resource-collector.agent.md](../agents/pl-resource-collector.agent.md) | 先整理参考资料、工具、论文、数据集和示例项目 | `LEARNINGS/RESOURCES/RESOURCE_LIBRARY.md` |
-| [agents/pl-explorer.agent.md](../agents/pl-explorer.agent.md) | 先快速建立项目全景认知 | `LEARNINGS/PROJECT_MAP.md` |
-| [agents/pl-support-engineer.agent.md](../agents/pl-support-engineer.agent.md) | 学习过程中遇到环境、依赖、工具或性能问题 | `LEARNINGS/SUPPORT/SUPPORT_LOG.md` |
-| [agents/pl-deep-diver.agent.md](../agents/pl-deep-diver.agent.md) | 需要专项分析某个模块、接口、函数或 HDL 逻辑块 | `LEARNINGS/DEEP_DIVE/*`、`LEARNINGS/FLOWS/*` |
-| [agents/pl-tutor.agent.md](../agents/pl-tutor.agent.md) | 已经有若干学习文档，需要组织学习路径与知识库 | `LEARNINGS/LEARNING_PATH.md`、`LEARNINGS/KNOWLEDGE_BASE/INDEX.md` |
-| [agents/pl-analyst.agent.md](../agents/pl-analyst.agent.md) | 需要评估学习效果、总结方法并生成复盘报告 | `LEARNINGS/REPORTS/LEARNING_REPORT.md` |
+| [agents/pl-resource-collector.md](../agents/pl-resource-collector.md) | 先整理参考资料、工具、论文、数据集和示例项目 | `LEARNINGS/RESOURCES/RESOURCE_LIBRARY.md` |
+| [agents/pl-explorer.md](../agents/pl-explorer.md) | 先快速建立项目全景认知 | `LEARNINGS/PROJECT_MAP.md` |
+| [agents/pl-support-engineer.md](../agents/pl-support-engineer.md) | 学习过程中遇到环境、依赖、工具或性能问题 | `LEARNINGS/SUPPORT/SUPPORT_LOG.md` |
+| [agents/pl-deep-diver.md](../agents/pl-deep-diver.md) | 需要专项分析某个模块、接口、函数或 HDL 逻辑块 | `LEARNINGS/DEEP_DIVE/*`、`LEARNINGS/FLOWS/*` |
+| [agents/pl-tutor.md](../agents/pl-tutor.md) | 已经有若干学习文档，需要组织学习路径与知识库 | `LEARNINGS/LEARNING_PATH.md`、`LEARNINGS/KNOWLEDGE_BASE/INDEX.md` |
+| [agents/pl-analyst.md](../agents/pl-analyst.md) | 需要评估学习效果、总结方法并生成复盘报告 | `LEARNINGS/REPORTS/LEARNING_REPORT.md` |
 
 ### 技能入口
 
@@ -41,7 +41,7 @@
 
 - [agents/pl-references/AGENTS.md](../agents/pl-references/AGENTS.md)
 
-这里定义了共享输出目录、进度日志、分析约束和 Agent / Skill 协作规则。仓库中的这份文件用于阅读和版本管理；运行时所有交叉引用都必须指向 `~/.copilot/agents/pl-references/`。如果该目录缺失，Agent / Skill 应立即报错停止，而不是在 `LEARNINGS/` 或仓库根目录里再生成一套 framework 文件。
+这里定义了共享输出目录、进度日志、分析约束和 Agent / Skill 协作规则。仓库中的这份文件用于阅读和版本管理；运行时所有交叉引用都必须指向 `{{AAS_HOME}}/agents/pl-references/`。如果该目录缺失，Agent / Skill 应立即报错停止，而不是在 `LEARNINGS/` 或仓库根目录里再生成一套 framework 文件。
 
 ## 2. 顺序
 
@@ -85,7 +85,7 @@
 
 ## 4. 当前修订后的关键约束
 
-- 共享 framework 文件和模板在运行时只能从 `~/.copilot/agents/pl-references/` 读取，不能再依赖仓库内的相对路径。
+- 共享 framework 文件和模板在运行时只能从 `{{AAS_HOME}}/agents/pl-references/` 读取，不能再依赖仓库内的相对路径。
 - 默认运行模式要求 `pl-coordinator` 从阶段 0 连续推进到阶段 6；中间的角色调度顺序、范围取舍和目录命名由总控自行决定，并写入 `LEARNINGS/LEARNING_PROGRESS.md`。
 - 多轮学习文档必须遵循 canonical / archive 分层：顶层保留最新文件，历史版本归档到 `LEARNINGS/PLAN/`、`MAP/`、`PATH/`、`DEEP_DIVE/<module>/`、`FLOWS/<topic>/`、`REPORTS/HISTORY/` 等目录。
 - 阶段 5.5 结束时，`LEARNINGS/INDEX.md` 和 `LEARNINGS/Pending_User_Actions.md` 都应存在；即便本轮无待办，也要显式写出“本轮无待用户处理事项”。

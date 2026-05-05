@@ -6,7 +6,7 @@
 
 ### 推荐总入口
 
-- [agents/project-director.agent.md](../agents/project-director.agent.md)
+- [agents/project-director.md](../agents/project-director.md)
 
 适用场景：
 
@@ -18,17 +18,17 @@
 
 | 入口 Agent | 适用场景 | 主要输出 |
 |------------|----------|----------|
-| [agents/pd-requirement-analyst.agent.md](../agents/pd-requirement-analyst.agent.md) | 只有原始需求，需要先整理成 PRD | `Agent_doc/PRD.md` |
-| [agents/pd-architect-task-planner.agent.md](../agents/pd-architect-task-planner.agent.md) | 已有 PRD，需要产出架构和任务拆解 | `Agent_doc/System_Architecture_and_Task_Breakdown.md` |
-| [agents/pd-developer.agent.md](../agents/pd-developer.agent.md) | 已有任务和架构，需要进入编码实现 | 代码、测试、模块说明 |
-| [agents/pd-qa-tester.agent.md](../agents/pd-qa-tester.agent.md) | 需要设计测试用例、执行黑盒验证或补测 | 测试用例、测试报告 |
-| [agents/pd-qa-gatekeeper.agent.md](../agents/pd-qa-gatekeeper.agent.md) | 所有交付物基本齐备，需要做终审裁决或审计 release 合规性 | `Agent_doc/Quality_Check_Report.md` |
+| [agents/pd-requirement-analyst.md](../agents/pd-requirement-analyst.md) | 只有原始需求，需要先整理成 PRD | `Agent_doc/PRD.md` |
+| [agents/pd-architect-task-planner.md](../agents/pd-architect-task-planner.md) | 已有 PRD，需要产出架构和任务拆解 | `Agent_doc/System_Architecture_and_Task_Breakdown.md` |
+| [agents/pd-developer.md](../agents/pd-developer.md) | 已有任务和架构，需要进入编码实现 | 代码、测试、模块说明 |
+| [agents/pd-qa-tester.md](../agents/pd-qa-tester.md) | 需要设计测试用例、执行黑盒验证或补测 | 测试用例、测试报告 |
+| [agents/pd-qa-gatekeeper.md](../agents/pd-qa-gatekeeper.md) | 所有交付物基本齐备，需要做终审裁决或审计 release 合规性 | `Agent_doc/Quality_Check_Report.md` |
 
 ### 共享规则入口
 
 - [agents/pd-references/AGENTS.md](../agents/pd-references/AGENTS.md)
 
-这里定义了共享目录、进度日志、GitLab 流程、交付物路径和跨角色通用约束。仓库中的这份文件用于阅读和版本管理；运行时所有 Agent / 模板的交叉引用都必须指向 `~/.copilot/agents/pd-references/`。如果该目录缺失，Agent 应立即报错停止，而不是在项目目录或 `Agent_doc/` 下再生成一套 framework 文件。
+这里定义了共享目录、进度日志、GitLab 流程、交付物路径和跨角色通用约束。仓库中的这份文件用于阅读和版本管理；运行时所有 Agent / 模板的交叉引用都必须指向 `{{AAS_HOME}}/agents/pd-references/`。如果该目录缺失，Agent 应立即报错停止，而不是在项目目录或 `Agent_doc/` 下再生成一套 framework 文件。
 
 ## 2. 顺序
 
@@ -59,7 +59,7 @@
 
 ## 4. 当前修订后的关键约束
 
-- 共享 framework 文件和模板在运行时只能从 `~/.copilot/agents/pd-references/` 读取，不能再依赖仓库内的相对路径。
+- 共享 framework 文件和模板在运行时只能从 `{{AAS_HOME}}/agents/pd-references/` 读取，不能再依赖仓库内的相对路径。
 - 默认运行模式要求 `project-director` 从阶段 0 连续推进到阶段 7；中间可决策项由总控自行决定并写入 `Agent_doc/Agent_Progress_Log.md`。
 - 多轮项目文档必须遵循 canonical / archive 分层：顶层保留最新文件，历史版本归档到 `Agent_doc/PRD/`、`Architecture/`、`QualityCheck/`、`pd-developer-doc/<module>/`、`pd-qa-tester-doc/TestCases/`、`pd-qa-tester-doc/TestReport/` 等目录。
 - 阶段 6.5 结束时，`Agent_doc/INDEX.md` 和 `Agent_doc/Pending_User_Actions.md` 都应存在；即便本轮无待办，也要显式写出“本轮无待用户处理事项”。

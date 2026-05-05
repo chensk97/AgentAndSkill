@@ -2,13 +2,49 @@
 
 ## Framework File Location (HARD RULE)
 
-- This file (`AGENTS.md`) and every `*_template.md` referenced from any `*.agent.md` live **only** under `~/.copilot/agents/pd-references/`.
-- All cross-references to this directory inside agent / skill files MUST use the absolute path `~/.copilot/agents/pd-references/...`. Never resolve them relative to the user's project working directory.
-- If an agent fails to read a path under `~/.copilot/agents/pd-references/`, it MUST stop and report the error to the user (suggest checking that `~/.copilot/agents/pd-references/` exists). It is **forbidden** to silently regenerate `AGENTS.md` or any template inside the user's project (e.g. under `Agent_doc/`, `pd-references/`, or repo root). The framework files are read-only inputs, not artifacts to be reproduced per project.
+- This file (`AGENTS.md`) and every `*_template.md` referenced from any agent `*.md` live **only** under `{{AAS_HOME}}/agents/pd-references/`.
+- All cross-references to this directory inside agent / skill files MUST use the absolute path `{{AAS_HOME}}/agents/pd-references/...`. Never resolve them relative to the user's project working directory.
+- If an agent fails to read a path under `{{AAS_HOME}}/agents/pd-references/`, it MUST stop and report the error to the user (suggest checking that `{{AAS_HOME}}/agents/pd-references/` exists). It is **forbidden** to silently regenerate `AGENTS.md` or any template inside the user's project (e.g. under `Agent_doc/`, `pd-references/`, or repo root). The framework files are read-only inputs, not artifacts to be reproduced per project.
+
+## Large File Read/Write Principle (HARD RULE)
+
+- Large code files, documents, logs, or any other long-form text MUST be read and written in chunks, steps, or chapters. Do not attempt one-shot processing for oversized content when the work can be split into smaller logical slices.
+- Prefer per-section reads, targeted edits, and iterative writes. For example: scan headings first, then read one section, then update one section, then continue.
+- When drafting or revising long Markdown artifacts, preserve a clear chunk boundary plan (for example by phase, heading, module, or appendix) so the current slice and remaining slices are explicit.
+- When delegating to any subagent / task-style workflow, you MUST explicitly instruct the downstream agent to follow the same chunking rule. This is mandatory for large files to avoid context loss, truncation, compression artifacts, or incomplete carry-over.
+- If a large artifact cannot be safely handled in one pass, stop broad generation, split the work into bounded chunks first, and continue chunk by chunk.
+
+## Subagent / Task Model Selection (HARD RULE)
+
+- Whenever invoking any task-style tool, subagent, or child agent workflow, you MUST explicitly pass `model: "claude-opus-4.7"`.
+- If that model is unavailable or the invocation fails because the model is rejected, retry in this exact fallback order: `claude-opus-4.6`, `gpt-5.5`, `gpt-5.4`.
+- Do not omit the `model` field. Do not silently substitute other families such as Sonnet, Haiku, Gemini, or any other model unless the user explicitly requested a different model in the current turn.
+- The same default applies even for simple execution or lightweight research sub-tasks. User-specified model overrides still take precedence for the current turn.
+
+## Completion Follow-Up Rule (HARD RULE)
+
+- After all requested work is complete and before ending the turn, the agent MUST ask this exact follow-up question: `还有没有补充要做的事情？请一次性列出，我将继续在本轮内处理。`
+- If a user-question tool is available and not disabled (for example `ask_user`, `AskUserQuestion`, or `request_user_input`), use that tool first. If no such tool is available, ask the same question in plain text.
+- This mandatory follow-up happens after the completion summary and does not count as a mid-process interruption under any default "do not disturb the user" rule.
+- The agent MUST NOT end the round until the user explicitly confirms there is nothing else to do, or otherwise clearly allows closure.
+- If the question tool requires a schema such as `requestedSchema`, keep it minimal and valid JSON. Prefer only the necessary fields such as `type`, `title`, `description`, optional `enum`, `number`, or `integer`.
+- Avoid raw quote characters inside Chinese schema text when they may break JSON parsing. Prefer simplified wording such as `如无可填无`, or escape quotes explicitly (for example `\u0022无\u0022`).
+- Recommended minimal schema example: `{"properties":{"todo":{"type":"string","title":"补充事项","description":"请输入还需要继续处理的事项，如无可填无。"}},"required":["todo"]}`
+
+## Runtime Anti-Bypass Audit (HARD RULE)
+
+- Shared `AGENTS.md` inheritance MUST NOT be treated as implicit protection when a parent agent launches a subagent, task-style workflow, or any isolated child context. The parent agent must restate the required runtime rules in the child invocation whenever they matter to the delegated work.
+- At minimum, any delegated workflow that may touch long text, produce multi-section output, or end a user-facing task MUST explicitly carry forward:
+  - the chunked large-file handling rule
+  - the required `model` field and fallback order
+  - the mandatory completion follow-up rule
+- Before accepting a child result, marking a stage complete, or handing work to the next role, the parent agent MUST perform an audit check that these constraints were actually included in the child invocation or verifiably followed in execution evidence.
+- If the parent agent cannot show that the child invocation carried these constraints, the result is non-compliant by default. The parent agent must either rerun the child with explicit constraints or record the non-compliance and block completion.
+- Any compliance gap found during delegation, review, or recovery MUST be written into `Agent_Progress_Log.md` together with the corrective action taken.
 
 ## Scope
 
-- This file defines cross-agent rules for all `*.agent.md` files in this directory.
+- This file defines cross-agent rules for all agent files in this directory.
 - Keep common rules here; keep each agent file focused on role-specific responsibilities, inputs, outputs, and quality checks.
 - If a role file is stricter than this file, follow the role file.
 
@@ -117,3 +153,8 @@ Default mappings (each role file may add more):
 约束：
 - 不允许只在文档中提及而不真正调用；调用时按 `using-superpowers` 的红线"Announce: 'Using [skill] to [purpose]'"声明。
 - 当 superpowers 技能与本 Agent 的强约束冲突时，遵循 `using-superpowers` 的优先级：用户显式指令 > superpowers 技能 > 默认行为；本 AGENTS.md 中的硬性合规条款（GitLab 流程、release 不可改写、文档目录规范）属于"用户显式指令"，必须高于 superpowers 默认建议。
+
+## Reusable Templates
+
+- For a structured Git / GitLab / `Agent_doc` preflight report, use [repo_readiness_template.md]({{AAS_HOME}}/agents/pd-references/repo_readiness_template.md).
+- For a structured `Agent_doc` archive audit, use [archive_audit_checklist_template.md]({{AAS_HOME}}/agents/pd-references/archive_audit_checklist_template.md).

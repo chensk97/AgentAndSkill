@@ -1,0 +1,344 @@
+{
+  "lastUpdated": "2026-05-05",
+  "sharedRuleFiles": {
+    "pd": "agents/pd-references/AGENTS.md",
+    "pl": "agents/pl-references/AGENTS.md"
+  },
+  "agents": [
+    {
+      "name": "project-director",
+      "path": "agents/project-director.md",
+      "suite": "pd",
+      "role": "orchestrator",
+      "sharedRules": "agents/pd-references/AGENTS.md",
+      "outputs": [
+        "Agent_doc/Agent_Progress_Log.md",
+        "Agent_doc/INDEX.md",
+        "Agent_doc/Pending_User_Actions.md"
+      ],
+      "delegatesTo": [
+        "pd-requirement-analyst",
+        "pd-architect-task-planner",
+        "pd-developer",
+        "pd-qa-tester",
+        "pd-qa-gatekeeper"
+      ],
+      "assistsWith": [
+        "pd-check-repo-readiness",
+        "pd-audit-agent-doc"
+      ],
+      "status": "validated-in-practice"
+    },
+    {
+      "name": "pd-requirement-analyst",
+      "path": "agents/pd-requirement-analyst.md",
+      "suite": "pd",
+      "role": "specialist",
+      "sharedRules": "agents/pd-references/AGENTS.md",
+      "outputs": [
+        "Agent_doc/PRD.md"
+      ],
+      "handoffTo": [
+        "pd-architect-task-planner",
+        "pd-qa-gatekeeper"
+      ],
+      "status": "defined"
+    },
+    {
+      "name": "pd-architect-task-planner",
+      "path": "agents/pd-architect-task-planner.md",
+      "suite": "pd",
+      "role": "specialist",
+      "sharedRules": "agents/pd-references/AGENTS.md",
+      "outputs": [
+        "Agent_doc/System_Architecture_and_Task_Breakdown.md"
+      ],
+      "handoffTo": [
+        "pd-developer",
+        "pd-qa-tester",
+        "pd-qa-gatekeeper"
+      ],
+      "status": "defined"
+    },
+    {
+      "name": "pd-developer",
+      "path": "agents/pd-developer.md",
+      "suite": "pd",
+      "role": "specialist",
+      "sharedRules": "agents/pd-references/AGENTS.md",
+      "outputs": [
+        "code",
+        "tests",
+        "Agent_doc/pd-developer-doc/README_<模块名>.md"
+      ],
+      "handoffTo": [
+        "pd-qa-tester",
+        "pd-qa-gatekeeper"
+      ],
+      "status": "defined"
+    },
+    {
+      "name": "pd-qa-tester",
+      "path": "agents/pd-qa-tester.md",
+      "suite": "pd",
+      "role": "specialist",
+      "sharedRules": "agents/pd-references/AGENTS.md",
+      "outputs": [
+        "Agent_doc/pd-qa-tester-doc/Test_Cases_<任务标识>.md",
+        "Agent_doc/pd-qa-tester-doc/Test_Report_<任务标识>.md"
+      ],
+      "handoffTo": [
+        "pd-qa-gatekeeper"
+      ],
+      "status": "defined"
+    },
+    {
+      "name": "pd-qa-gatekeeper",
+      "path": "agents/pd-qa-gatekeeper.md",
+      "suite": "pd",
+      "role": "specialist",
+      "sharedRules": "agents/pd-references/AGENTS.md",
+      "outputs": [
+        "Agent_doc/Quality_Check_Report.md"
+      ],
+      "handoffTo": [
+        "project-director"
+      ],
+      "status": "defined"
+    },
+    {
+      "name": "pl-coordinator",
+      "path": "agents/pl-coordinator.md",
+      "suite": "pl",
+      "role": "orchestrator",
+      "sharedRules": "agents/pl-references/AGENTS.md",
+      "outputs": [
+        "LEARNINGS/LEARNING_PLAN.md",
+        "LEARNINGS/INDEX.md",
+        "LEARNINGS/Pending_User_Actions.md",
+        "LEARNINGS/LEARNING_PROGRESS.md"
+      ],
+      "delegatesTo": [
+        "pl-resource-collector",
+        "pl-explorer",
+        "pl-support-engineer",
+        "pl-deep-diver",
+        "pl-tutor",
+        "pl-analyst"
+      ],
+      "assistsWith": [
+        "pl-scan-project",
+        "pl-analyze-deps",
+        "pl-trace-flow",
+        "pl-gen-tests",
+        "pl-build-kb"
+      ],
+      "status": "designed-awaiting-more-practice"
+    },
+    {
+      "name": "pl-resource-collector",
+      "path": "agents/pl-resource-collector.md",
+      "suite": "pl",
+      "role": "specialist",
+      "sharedRules": "agents/pl-references/AGENTS.md",
+      "outputs": [
+        "LEARNINGS/RESOURCES/RESOURCE_LIBRARY.md"
+      ],
+      "handoffTo": [
+        "pl-explorer",
+        "pl-tutor",
+        "pl-analyst"
+      ],
+      "status": "defined"
+    },
+    {
+      "name": "pl-explorer",
+      "path": "agents/pl-explorer.md",
+      "suite": "pl",
+      "role": "specialist",
+      "sharedRules": "agents/pl-references/AGENTS.md",
+      "outputs": [
+        "LEARNINGS/PROJECT_MAP.md",
+        "LEARNINGS/DEPENDENCY_MAP.md"
+      ],
+      "handoffTo": [
+        "pl-deep-diver",
+        "pl-tutor",
+        "pl-analyst"
+      ],
+      "status": "defined"
+    },
+    {
+      "name": "pl-support-engineer",
+      "path": "agents/pl-support-engineer.md",
+      "suite": "pl",
+      "role": "specialist",
+      "sharedRules": "agents/pl-references/AGENTS.md",
+      "outputs": [
+        "LEARNINGS/SUPPORT/SUPPORT_LOG.md"
+      ],
+      "handoffTo": [
+        "pl-coordinator",
+        "pl-deep-diver",
+        "pl-tutor"
+      ],
+      "status": "defined"
+    },
+    {
+      "name": "pl-deep-diver",
+      "path": "agents/pl-deep-diver.md",
+      "suite": "pl",
+      "role": "specialist",
+      "sharedRules": "agents/pl-references/AGENTS.md",
+      "outputs": [
+        "LEARNINGS/DEEP_DIVE/<module>.md",
+        "LEARNINGS/FLOWS/<topic>.md",
+        "LEARNINGS/TESTS/TEST_ANALYSIS_<module>.md"
+      ],
+      "handoffTo": [
+        "pl-tutor",
+        "pl-analyst"
+      ],
+      "status": "defined"
+    },
+    {
+      "name": "pl-tutor",
+      "path": "agents/pl-tutor.md",
+      "suite": "pl",
+      "role": "specialist",
+      "sharedRules": "agents/pl-references/AGENTS.md",
+      "outputs": [
+        "LEARNINGS/LEARNING_PATH.md",
+        "LEARNINGS/KNOWLEDGE_BASE/INDEX.md"
+      ],
+      "handoffTo": [
+        "pl-analyst",
+        "pl-coordinator"
+      ],
+      "status": "defined"
+    },
+    {
+      "name": "pl-analyst",
+      "path": "agents/pl-analyst.md",
+      "suite": "pl",
+      "role": "specialist",
+      "sharedRules": "agents/pl-references/AGENTS.md",
+      "outputs": [
+        "LEARNINGS/REPORTS/LEARNING_REPORT.md"
+      ],
+      "handoffTo": [
+        "pl-coordinator",
+        "pl-tutor"
+      ],
+      "status": "defined"
+    }
+  ],
+  "skills": [
+    {
+      "name": "pd-check-repo-readiness",
+      "path": "skills/pd-check-repo-readiness/SKILL.md",
+      "suite": "pd",
+      "role": "skill",
+      "sharedRules": "agents/pd-references/AGENTS.md",
+      "outputs": [
+        "Agent_doc/Other/Repo_Readiness_Check.md",
+        "Agent_doc/Agent_Progress_Log.md"
+      ],
+      "usedBy": [
+        "project-director",
+        "pd-qa-gatekeeper"
+      ],
+      "status": "new"
+    },
+    {
+      "name": "pd-audit-agent-doc",
+      "path": "skills/pd-audit-agent-doc/SKILL.md",
+      "suite": "pd",
+      "role": "skill",
+      "sharedRules": "agents/pd-references/AGENTS.md",
+      "outputs": [
+        "Agent_doc/INDEX.md",
+        "Agent_doc/Pending_User_Actions.md",
+        "Agent_doc/Agent_Progress_Log.md"
+      ],
+      "usedBy": [
+        "project-director",
+        "pd-qa-gatekeeper"
+      ],
+      "status": "new"
+    },
+    {
+      "name": "pl-scan-project",
+      "path": "skills/pl-scan-project/SKILL.md",
+      "suite": "pl",
+      "role": "skill",
+      "sharedRules": "agents/pl-references/AGENTS.md",
+      "outputs": [
+        "LEARNINGS/PROJECT_MAP.md"
+      ],
+      "usedBy": [
+        "pl-explorer",
+        "pl-coordinator"
+      ],
+      "status": "defined"
+    },
+    {
+      "name": "pl-analyze-deps",
+      "path": "skills/pl-analyze-deps/SKILL.md",
+      "suite": "pl",
+      "role": "skill",
+      "sharedRules": "agents/pl-references/AGENTS.md",
+      "outputs": [
+        "LEARNINGS/DEPENDENCY_MAP.md"
+      ],
+      "usedBy": [
+        "pl-explorer",
+        "pl-tutor"
+      ],
+      "status": "defined"
+    },
+    {
+      "name": "pl-trace-flow",
+      "path": "skills/pl-trace-flow/SKILL.md",
+      "suite": "pl",
+      "role": "skill",
+      "sharedRules": "agents/pl-references/AGENTS.md",
+      "outputs": [
+        "LEARNINGS/FLOWS/<topic>.md"
+      ],
+      "usedBy": [
+        "pl-deep-diver"
+      ],
+      "status": "defined"
+    },
+    {
+      "name": "pl-gen-tests",
+      "path": "skills/pl-gen-tests/SKILL.md",
+      "suite": "pl",
+      "role": "skill",
+      "sharedRules": "agents/pl-references/AGENTS.md",
+      "outputs": [
+        "LEARNINGS/TESTS/test_<module>.*",
+        "LEARNINGS/TESTS/TEST_ANALYSIS_<module>.md"
+      ],
+      "usedBy": [
+        "pl-deep-diver"
+      ],
+      "status": "defined"
+    },
+    {
+      "name": "pl-build-kb",
+      "path": "skills/pl-build-kb/SKILL.md",
+      "suite": "pl",
+      "role": "skill",
+      "sharedRules": "agents/pl-references/AGENTS.md",
+      "outputs": [
+        "LEARNINGS/KNOWLEDGE_BASE/INDEX.md"
+      ],
+      "usedBy": [
+        "pl-tutor"
+      ],
+      "status": "defined"
+    }
+  ]
+}

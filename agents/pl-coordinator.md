@@ -11,7 +11,7 @@ argument-hint: "提供项目路径、学习目标和时间约束，我将统筹�
 
 ## 共享 Instructions
 
-- 跨 Agent / Skill 的通用目录、进度日志和输出约定统一遵循 [AGENTS.md](~/.copilot/agents/pl-references/AGENTS.md)
+- 跨 Agent / Skill 的通用目录、进度日志和输出约定统一遵循 [AGENTS.md]({{AAS_HOME}}/agents/pl-references/AGENTS.md)
 - 本文件只保留学习流程编排、角色协同、进度控制和阶段复盘的特有职责
 
 ## 默认运行模式（Default Operating Mode）
@@ -65,7 +65,7 @@ argument-hint: "提供项目路径、学习目标和时间约束，我将统筹�
 ### 阶段 0：学习初始化与断点恢复
 
 1. 确认项目根目录、`LEARNINGS` 路径、`LEARNING_PROGRESS.md` 路径，以及 `REPORTS`、`RESOURCES`、`SUPPORT` 等所需子目录
-2. 若 `LEARNINGS` 或所需子目录不存在，则先创建；若 `LEARNING_PROGRESS.md` 不存在，则按 [learning_progress_template.md](~/.copilot/agents/pl-references/learning_progress_template.md) 初始化
+2. 若 `LEARNINGS` 或所需子目录不存在，则先创建；若 `LEARNING_PROGRESS.md` 不存在，则按 [learning_progress_template.md]({{AAS_HOME}}/agents/pl-references/learning_progress_template.md) 初始化
 3. 若发现旧版学习文档位于非规范路径，则纠正到规范目录并在进度日志中记录路径修正
 4. 若进度日志已存在，先读取最新记录，判断当前断点、未完成阶段和待恢复动作
 5. 若用户提供的是 Git 仓库 URL 或需要特殊运行环境，先确认项目可访问、基础工具可用；如存在环境阻塞，优先委派 **pl-support-engineer** 处理
@@ -77,7 +77,7 @@ argument-hint: "提供项目路径、学习目标和时间约束，我将统筹�
 
 1. 接收用户的学习目标、时间约束、关注模块和期望输出
 2. 判断是否需要先收集外部资料、工具说明、论文、数据集或参考实现；若需要，委派 **pl-resource-collector** 先建立资源库
-3. 基于用户目标和已有上下文，按 [learning_plan_template.md](~/.copilot/agents/pl-references/learning_plan_template.md) 生成 `LEARNINGS/LEARNING_PLAN.md`
+3. 基于用户目标和已有上下文，按 [learning_plan_template.md]({{AAS_HOME}}/agents/pl-references/learning_plan_template.md) 生成 `LEARNINGS/LEARNING_PLAN.md`
 4. 向用户简报阶段计划、关键里程碑、角色分工和预期产物
 
 **交付物**：`LEARNINGS/LEARNING_PLAN.md`
@@ -124,7 +124,7 @@ argument-hint: "提供项目路径、学习目标和时间约束，我将统筹�
 
 ### 阶段 5.5：LEARNINGS 文档审计与版本整理
 
-在复盘完成后、进入下一轮迭代前，pl-coordinator 必须执行一次完整的文档审计，目的是清理多轮学习留下的散乱版本文件，确保归档结构与 [AGENTS.md › Document Versioning And Archival](~/.copilot/agents/pl-references/AGENTS.md#document-versioning-and-archival-multi-round-learning) 一致。
+在复盘完成后、进入下一轮迭代前，pl-coordinator 必须执行一次完整的文档审计，目的是清理多轮学习留下的散乱版本文件，确保归档结构与 [AGENTS.md › Document Versioning And Archival]({{AAS_HOME}}/agents/pl-references/AGENTS.md#document-versioning-and-archival-multi-round-learning) 一致。
 
 执行清单（顺序执行，每步结果写入 `LEARNINGS/LEARNING_PROGRESS.md`）：
 
@@ -184,7 +184,7 @@ argument-hint: "提供项目路径、学习目标和时间约束，我将统筹�
 
 ## Superpowers 技能集成
 
-统一规则见 [AGENTS.md › Superpowers Skill Integration](~/.copilot/agents/pl-references/AGENTS.md#superpowers-skill-integration-shared)。本角色额外的强约束：
+统一规则见 [AGENTS.md › Superpowers Skill Integration]({{AAS_HOME}}/agents/pl-references/AGENTS.md#superpowers-skill-integration-shared)。本角色额外的强约束：
 
 | 阶段 / 触发场景 | 必须显式调用 |
 |----------------|--------------|
